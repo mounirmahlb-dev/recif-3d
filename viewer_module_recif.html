@@ -1,9 +1,9 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="fr">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Artificial Reef Module – Béni Saf, Algeria</title>
+    <title>Module de récif artificiel – Béni Saf, Algérie</title>
     <style>
         * {
             margin: 0;
@@ -20,118 +20,51 @@
         }
         
         /* ============================================================
-           IMPROVED: Scientific Information Overlay (top-left)
-           Professional styling with semi-transparent background
+           OVERLAY: Academic French text - compact, readable, non-intrusive
            ============================================================ */
-        #info-overlay {
+        .overlay {
             position: absolute;
             top: 20px;
             left: 20px;
-            max-width: 380px;
-            background: rgba(5, 35, 50, 0.85);
+            max-width: 360px;
+            background: rgba(5, 30, 45, 0.82);
             backdrop-filter: blur(8px);
             -webkit-backdrop-filter: blur(8px);
-            border: 1px solid rgba(100, 180, 200, 0.3);
-            border-radius: 12px;
-            padding: 18px 22px;
-            color: #e0f7fa;
-            z-index: 100;
-            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.4);
-        }
-        #info-overlay h1 {
-            font-size: 1.25rem;
-            margin-bottom: 12px;
-            font-weight: 600;
-            letter-spacing: 0.3px;
-            color: #80deea;
-            border-bottom: 1px solid rgba(100, 180, 200, 0.3);
-            padding-bottom: 10px;
-        }
-        #info-overlay h1 .flag {
-            font-size: 1.1rem;
-            margin-right: 6px;
-        }
-        #info-overlay .description {
-            font-size: 0.85rem;
-            line-height: 1.55;
-            opacity: 0.92;
-            margin-bottom: 12px;
-        }
-        #info-overlay .specs {
-            font-size: 0.78rem;
-            background: rgba(0, 60, 80, 0.5);
-            border-radius: 6px;
-            padding: 10px 12px;
-            margin-top: 10px;
-        }
-        #info-overlay .specs-title {
-            font-weight: 600;
-            color: #4dd0e1;
-            margin-bottom: 6px;
-            font-size: 0.8rem;
-            text-transform: uppercase;
-            letter-spacing: 0.5px;
-        }
-        #info-overlay .specs ul {
-            list-style: none;
-            padding: 0;
-        }
-        #info-overlay .specs li {
-            padding: 3px 0;
-            opacity: 0.88;
-        }
-        #info-overlay .specs li::before {
-            content: "▸ ";
-            color: #4dd0e1;
-            font-size: 0.7rem;
-        }
-        
-        /* Controls hint (bottom-center) */
-        #controls-hint {
-            position: absolute;
-            bottom: 25px;
-            left: 50%;
-            transform: translateX(-50%);
-            color: #b2ebf2;
-            font-size: 0.85rem;
-            z-index: 100;
-            background: rgba(5, 35, 50, 0.75);
-            backdrop-filter: blur(6px);
-            -webkit-backdrop-filter: blur(6px);
-            padding: 10px 24px;
-            border-radius: 25px;
             border: 1px solid rgba(100, 180, 200, 0.25);
-            pointer-events: none;
-            box-shadow: 0 2px 12px rgba(0, 0, 0, 0.3);
-        }
-        
-        /* Depth indicator (bottom-right) */
-        #depth-indicator {
-            position: absolute;
-            bottom: 25px;
-            right: 25px;
-            background: rgba(5, 35, 50, 0.8);
-            backdrop-filter: blur(6px);
-            -webkit-backdrop-filter: blur(6px);
-            border: 1px solid rgba(100, 180, 200, 0.3);
             border-radius: 10px;
-            padding: 12px 16px;
-            color: #80deea;
-            font-size: 0.9rem;
+            padding: 16px 20px;
+            color: #e0f4f8;
             z-index: 100;
-            text-align: center;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.35);
+            font-size: 0.82rem;
+            line-height: 1.5;
         }
-        #depth-indicator .depth-value {
-            font-size: 1.5rem;
+        .overlay h1 {
+            font-size: 1.05rem;
+            margin-bottom: 12px;
             font-weight: 600;
-            color: #4dd0e1;
+            color: #7dd3e8;
+            border-bottom: 1px solid rgba(100, 180, 200, 0.25);
+            padding-bottom: 10px;
+            line-height: 1.35;
         }
-        #depth-indicator .depth-label {
-            font-size: 0.7rem;
-            text-transform: uppercase;
-            letter-spacing: 1px;
-            opacity: 0.8;
-            margin-top: 2px;
+        .overlay p {
+            margin-bottom: 10px;
+            opacity: 0.92;
+            text-align: justify;
+        }
+        .overlay p:last-of-type {
+            margin-bottom: 0;
+        }
+        .overlay .hint {
+            margin-top: 14px;
+            padding-top: 10px;
+            border-top: 1px solid rgba(100, 180, 200, 0.2);
+            font-size: 0.75rem;
+            color: #a0d8e8;
+            opacity: 0.85;
+            text-align: center;
+            font-style: italic;
         }
         
         /* Loading indicator */
@@ -141,21 +74,21 @@
             left: 50%;
             transform: translate(-50%, -50%);
             color: #e0f7fa;
-            font-size: 1.2rem;
+            font-size: 1.1rem;
             z-index: 100;
             text-align: center;
             background: rgba(5, 35, 50, 0.9);
-            padding: 30px 40px;
-            border-radius: 15px;
+            padding: 28px 38px;
+            border-radius: 12px;
             border: 1px solid rgba(100, 180, 200, 0.3);
         }
         #loading .spinner {
-            width: 45px;
-            height: 45px;
+            width: 42px;
+            height: 42px;
             border: 3px solid rgba(255,255,255,0.15);
             border-top-color: #4dd0e1;
             border-radius: 50%;
-            margin: 0 auto 18px auto;
+            margin: 0 auto 16px auto;
             animation: spin 1s linear infinite;
         }
         @keyframes spin {
@@ -163,20 +96,16 @@
         }
         
         /* Mobile responsiveness */
-        @media (max-width: 500px) {
-            #info-overlay {
-                max-width: calc(100% - 40px);
+        @media (max-width: 480px) {
+            .overlay {
+                max-width: calc(100% - 30px);
+                left: 15px;
+                top: 15px;
                 padding: 14px 16px;
-                font-size: 0.9rem;
+                font-size: 0.78rem;
             }
-            #info-overlay h1 {
-                font-size: 1.1rem;
-            }
-            #info-overlay .description {
-                font-size: 0.8rem;
-            }
-            #depth-indicator {
-                bottom: 70px;
+            .overlay h1 {
+                font-size: 0.95rem;
             }
         }
     </style>
@@ -188,35 +117,20 @@
 </head>
 <body>
     <!-- ============================================================
-         IMPROVED: Scientific Information Overlay
-         Contains project title, description, and technical specs
+         OVERLAY: Academic French text (exact wording as requested)
          ============================================================ -->
-    <div id="info-overlay">
-        <h1><span class="flag">🇩🇿</span> Artificial Reef Module – Béni Saf</h1>
-        <div class="description">
-            Marine-grade concrete module designed to enhance benthic habitat complexity 
-            near the brine discharge point of the <strong>Béni Saf desalination plant</strong> 
-            (Gulf of Oran, Algeria). The hollow structure with circular tunnels provides 
-            shelter for juvenile fish and substrate for sessile invertebrates.
-        </div>
-        <div class="specs">
-            <div class="specs-title">📐 Technical Specifications</div>
-            <ul>
-                <li>Dimensions: 1 m × 1 m × 1 m cube</li>
-                <li>Material: Marine-grade reinforced concrete</li>
-                <li>Deployment depth: ~20 m (sandy bottom)</li>
-                <li>Purpose: Habitat restoration & biodiversity enhancement</li>
-            </ul>
-        </div>
-    </div>
-    
-    <!-- Controls hint (bottom-center) -->
-    <div id="controls-hint">🖱️ Drag to rotate &nbsp;•&nbsp; Scroll to zoom</div>
-    
-    <!-- Depth indicator (bottom-right) -->
-    <div id="depth-indicator">
-        <div class="depth-value">~20m</div>
-        <div class="depth-label">Deployment Depth</div>
+    <div class="overlay">
+        <h1>Module de récif artificiel en béton – Zone de Béni Saf (Algérie)</h1>
+        <p>
+            Le modèle 3D représente une unité de récif artificiel en béton sous forme de
+            cube creux (1 m × 1 m × 1 m) percé de tunnels circulaires traversants selon
+            les trois axes principaux.
+        </p>
+        <p>
+            Le module est destiné à être déployé sur un fond sableux vers 20 m de profondeur
+            dans le secteur côtier de Béni Saf (Aïn Témouchent, Algérie).
+        </p>
+        <p class="hint">Glisser pour faire tourner – Molette pour zoomer</p>
     </div>
     
     <!-- Loading indicator -->
@@ -236,14 +150,15 @@
         const MODEL_PATH = 'module_recif.glb';
         
         // ============================================================
-        // IMPROVED: Water / Fog Colors for realistic ~20m depth
-        // Coastal Mediterranean blue-green, slightly turbid
+        // WATER / FOG COLORS - Realistic ~20m depth
+        // Coastal Mediterranean (Béni Saf area) blue-green, slightly turbid
+        // Adjust these values to change underwater appearance
         // ============================================================
-        const WATER_COLOR = 0x0b4a5c;        // Deep coastal blue-green (IMPROVED)
-        const WATER_COLOR_LIGHT = 0x1a6a85;  // Lighter water for gradient
-        const FOG_COLOR = 0x0d5065;          // Fog color - matches water (IMPROVED)
-        const FOG_NEAR = 10;                 // Where fog starts (IMPROVED - more visibility)
-        const FOG_FAR = 55;                  // Where fog becomes opaque (IMPROVED)
+        const WATER_COLOR = 0x0a4555;        // Deep coastal blue-green
+        const WATER_COLOR_LIGHT = 0x186878;  // Lighter water for gradient
+        const FOG_COLOR = 0x0c4a58;          // Fog color - matches water
+        const FOG_NEAR = 8;                  // Where fog starts (closer = more atmosphere)
+        const FOG_FAR = 50;                  // Where fog becomes opaque
         
         // --- CAMERA SETTINGS ---
         const CAMERA_START_DISTANCE = 9;      // Initial distance (IMPROVED - closer)
@@ -263,31 +178,31 @@
         let cameraDistance = CAMERA_START_DISTANCE;
         
         // ============================================================
-        // IMPROVED: Fish Species Configuration
-        // More realistic Mediterranean/Atlantic species colors
+        // FISH SPECIES - Mediterranean/Atlantic coastal species
+        // Muted, natural colors (grey, olive, brown, bluish)
         // ============================================================
         const FISH_SPECIES = [
-            { name: 'grey_mullet', bodyColor: 0x6a7a7a, finColor: 0x4a5a5a, bellyColor: 0x8a9898, size: 0.9 },
-            { name: 'sea_bream', bodyColor: 0x7a6a5a, finColor: 0x5a4a3a, bellyColor: 0xa09080, size: 0.75 },
-            { name: 'grouper', bodyColor: 0x4a4a3a, finColor: 0x3a3a2a, bellyColor: 0x6a6a5a, size: 1.2 },
-            { name: 'damselfish', bodyColor: 0x3a4a5a, finColor: 0x2a3a4a, bellyColor: 0x5a6a7a, size: 0.45 },
-            { name: 'wrasse', bodyColor: 0x5a5a4a, finColor: 0x4a4a3a, bellyColor: 0x7a7a6a, size: 0.55 },
-            { name: 'bass', bodyColor: 0x5a6a6a, finColor: 0x3a4a4a, bellyColor: 0x8a9a9a, size: 1.0 },
-            { name: 'comber', bodyColor: 0x6a5a4a, finColor: 0x4a3a2a, bellyColor: 0x9a8a7a, size: 0.6 }
+            { name: 'mulet', bodyColor: 0x687878, finColor: 0x485858, bellyColor: 0x909898, size: 0.85 },
+            { name: 'sar', bodyColor: 0x6a6050, finColor: 0x504838, bellyColor: 0x989080, size: 0.7 },
+            { name: 'merou', bodyColor: 0x484538, finColor: 0x383528, bellyColor: 0x686558, size: 1.1 },
+            { name: 'castagnole', bodyColor: 0x3a4850, finColor: 0x283840, bellyColor: 0x586068, size: 0.4 },
+            { name: 'girelle', bodyColor: 0x585548, finColor: 0x484538, bellyColor: 0x787568, size: 0.5 },
+            { name: 'loup', bodyColor: 0x586468, finColor: 0x384848, bellyColor: 0x889090, size: 0.95 },
+            { name: 'serran', bodyColor: 0x605545, finColor: 0x483830, bellyColor: 0x888070, size: 0.55 }
         ];
         
         // ============================================================
-        // IMPROVED: Seaweed/Algae Species Configuration
-        // Mediterranean benthic vegetation - more variety
+        // SEAWEED/ALGAE SPECIES - Mediterranean benthic vegetation
+        // Desaturated greens and browns for realism
         // ============================================================
         const SEAWEED_TYPES = [
-            { name: 'posidonia', color: 0x3a5a4a, height: 1.3, width: 0.045, blades: 9, curve: 0.25 },
-            { name: 'caulerpa', color: 0x2a4a3a, height: 0.55, width: 0.028, blades: 14, curve: 0.12 },
-            { name: 'padina', color: 0x5a4a3a, height: 0.38, width: 0.09, blades: 5, curve: 0.35 },
-            { name: 'cystoseira', color: 0x3a3a2a, height: 1.0, width: 0.022, blades: 16, curve: 0.2 },
-            { name: 'ulva', color: 0x4a6a5a, height: 0.45, width: 0.065, blades: 7, curve: 0.4 },
-            { name: 'dictyota', color: 0x4a4a3a, height: 0.65, width: 0.038, blades: 11, curve: 0.28 },
-            { name: 'halopteris', color: 0x3a4a3a, height: 0.5, width: 0.015, blades: 20, curve: 0.18 }
+            { name: 'posidonia', color: 0x3a5545, height: 1.2, width: 0.04, blades: 8, curve: 0.22 },
+            { name: 'caulerpa', color: 0x2d4538, height: 0.5, width: 0.025, blades: 12, curve: 0.1 },
+            { name: 'padina', color: 0x5a4838, height: 0.35, width: 0.08, blades: 5, curve: 0.32 },
+            { name: 'cystoseira', color: 0x3d3828, height: 0.9, width: 0.02, blades: 14, curve: 0.18 },
+            { name: 'ulva', color: 0x456050, height: 0.4, width: 0.06, blades: 6, curve: 0.35 },
+            { name: 'dictyota', color: 0x484030, height: 0.6, width: 0.035, blades: 10, curve: 0.25 },
+            { name: 'halopteris', color: 0x384538, height: 0.45, width: 0.012, blades: 18, curve: 0.15 }
         ];
         
         // Mouse interaction
@@ -347,48 +262,47 @@
         }
         
         // ============================================================
-        // IMPROVED: Lighting Setup for realistic ~20m depth
-        // Balanced to show detail while maintaining underwater feel
+        // LIGHTING SETUP - Realistic ~20m depth underwater
+        // At 20m, red wavelengths are absorbed; light is blue-green shifted
         // ============================================================
         function setupLighting() {
-            // Ambient light - slightly desaturated blue-green for depth
-            const ambientLight = new THREE.AmbientLight(0x4a8090, 0.45);
+            // Ambient light - desaturated blue-green for depth
+            const ambientLight = new THREE.AmbientLight(0x4a7888, 0.5);
             scene.add(ambientLight);
             
-            // Hemisphere light - sky/seabed color gradient
-            const hemiLight = new THREE.HemisphereLight(0x6aacbc, 0x3a5a4a, 0.35);
+            // Hemisphere light - surface blue / seabed greenish gradient
+            const hemiLight = new THREE.HemisphereLight(0x5a9ab0, 0x3a5848, 0.4);
             scene.add(hemiLight);
             
-            // IMPROVED: Main directional light (attenuated sunlight at 20m)
-            // At 20m, reds are largely absorbed, light is blue-green shifted
-            const sunLight = new THREE.DirectionalLight(0x8ac8d8, 1.3);
-            sunLight.position.set(8, 35, 12);
+            // Main directional light (filtered sunlight from surface)
+            const sunLight = new THREE.DirectionalLight(0x88c5d5, 1.4);
+            sunLight.position.set(10, 40, 15);
             sunLight.castShadow = true;
             sunLight.shadow.mapSize.width = 2048;
             sunLight.shadow.mapSize.height = 2048;
             sunLight.shadow.camera.near = 1;
-            sunLight.shadow.camera.far = 60;
-            sunLight.shadow.camera.left = -18;
-            sunLight.shadow.camera.right = 18;
-            sunLight.shadow.camera.top = 18;
-            sunLight.shadow.camera.bottom = -18;
+            sunLight.shadow.camera.far = 65;
+            sunLight.shadow.camera.left = -20;
+            sunLight.shadow.camera.right = 20;
+            sunLight.shadow.camera.top = 20;
+            sunLight.shadow.camera.bottom = -20;
             sunLight.shadow.bias = -0.0001;
             sunLight.shadow.normalBias = 0.02;
             scene.add(sunLight);
             
-            // Secondary fill light (scattered water light)
-            const fillLight = new THREE.DirectionalLight(0x5a9aaa, 0.35);
-            fillLight.position.set(-8, 15, -12);
+            // Fill light (scattered water light from opposite side)
+            const fillLight = new THREE.DirectionalLight(0x5090a0, 0.4);
+            fillLight.position.set(-10, 12, -15);
             scene.add(fillLight);
             
-            // Bounce light from sandy bottom
-            const bounceLight = new THREE.DirectionalLight(0xb09a72, 0.18);
-            bounceLight.position.set(0, -8, 0);
+            // Bounce light from sandy bottom (warm sand color)
+            const bounceLight = new THREE.DirectionalLight(0xa89068, 0.2);
+            bounceLight.position.set(0, -10, 0);
             scene.add(bounceLight);
             
-            // IMPROVED: Subtle rim light for module visibility
-            const rimLight = new THREE.DirectionalLight(0x7abaca, 0.25);
-            rimLight.position.set(-5, 8, 15);
+            // Rim light for better module edge definition
+            const rimLight = new THREE.DirectionalLight(0x6ab0c0, 0.28);
+            rimLight.position.set(-6, 10, 18);
             scene.add(rimLight);
         }
         
