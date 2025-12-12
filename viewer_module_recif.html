@@ -1,9 +1,9 @@
 <!DOCTYPE html>
-<html lang="fr">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Module de récif artificiel – Béni Saf, Algérie</title>
+    <title>Artificial Reef Module – Béni Saf, Algeria</title>
     <style>
         * {
             margin: 0;
@@ -117,20 +117,20 @@
 </head>
 <body>
     <!-- ============================================================
-         OVERLAY: Academic French text (exact wording as requested)
+         OVERLAY: Academic English text (exact wording as requested)
          ============================================================ -->
     <div class="overlay">
-        <h1>Module de récif artificiel en béton – Zone de Béni Saf (Algérie)</h1>
+        <h1>Concrete Artificial Reef Module – Béni Saf Area (Algeria)</h1>
         <p>
-            Le modèle 3D représente une unité de récif artificiel en béton sous forme de
-            cube creux (1 m × 1 m × 1 m) percé de tunnels circulaires traversants selon
-            les trois axes principaux.
+            The 3D model represents a concrete artificial reef unit in the form of a
+            hollow cube (1 m × 1 m × 1 m) with circular tunnels passing through the
+            structure along the three main axes.
         </p>
         <p>
-            Le module est destiné à être déployé sur un fond sableux vers 20 m de profondeur
-            dans le secteur côtier de Béni Saf (Aïn Témouchent, Algérie).
+            The module is intended to be deployed on a sandy seabed at about 20 m depth
+            in the coastal area of Béni Saf (Aïn Témouchent, Algeria).
         </p>
-        <p class="hint">Glisser pour faire tourner – Molette pour zoomer</p>
+        <p class="hint">Drag to rotate – Scroll to zoom</p>
     </div>
     
     <!-- Loading indicator -->
@@ -167,10 +167,22 @@
         const CAMERA_MAX_DISTANCE = 28;       // Farthest zoom
         
         // ============================================================
+        // FLOATING MODULE SETTINGS
+        // The module floats above the seafloor for visualization
+        // ============================================================
+        const MODULE_FLOAT_HEIGHT = 1.5;      // Height above seafloor (in meters)
+        const MODULE_BOB_AMPLITUDE = 0.08;    // Subtle up-down bobbing amplitude
+        const MODULE_BOB_SPEED = 0.4;         // Speed of bobbing motion (slow and gentle)
+        const MODULE_SWAY_AMPLITUDE = 0.015;  // Very subtle rotation sway
+        const MODULE_SWAY_SPEED = 0.25;       // Speed of sway motion
+        
+        // ============================================================
         // GLOBAL VARIABLES
         // ============================================================
         let scene, camera, renderer;
         let reefGroup;
+        let reefModel = null;            // Reference to loaded model for floating animation
+        let reefBaseY = 0;               // Base Y position for floating animation
         let particles;
         let fishes = [];
         let seaweedClusters = [];
@@ -1051,6 +1063,10 @@
         // ============================================================
         // LOAD GLB MODEL
         // ============================================================
+        // FLOATING MODULE: The module is positioned ABOVE the seafloor
+        // to appear suspended in the water column for visualization.
+        // A gentle bobbing animation reinforces this floating effect.
+        // ============================================================
         function loadReefModel() {
             const loader = new THREE.GLTFLoader();
             
@@ -1063,9 +1079,21 @@
                     const center = box.getCenter(new THREE.Vector3());
                     const size = box.getSize(new THREE.Vector3());
                     
+                    // Center the model horizontally
                     model.position.x = -center.x;
                     model.position.z = -center.z;
-                    model.position.y = -box.min.y - 2;
+                    
+                    // ============================================================
+                    // FLOATING POSITION: Raise the module above the seafloor
+                    // The seafloor is at Y = -2, so we position the module
+                    // MODULE_FLOAT_HEIGHT meters above it
+                    // ============================================================
+                    const seafloorY = -2;
+                    reefBaseY = seafloorY + MODULE_FLOAT_HEIGHT + (size.y / 2);
+                    model.position.y = -center.y + reefBaseY;
+                    
+                    // Store reference for floating animation
+                    reefModel = model;
                     
                     model.traverse(function(child) {
                         if (child.isMesh) {
@@ -1085,6 +1113,7 @@
                         'W:', size.x.toFixed(2), 
                         'H:', size.y.toFixed(2), 
                         'D:', size.z.toFixed(2));
+                    console.log('🌊 Floating at height:', MODULE_FLOAT_HEIGHT.toFixed(2), 'm above seafloor');
                 },
                 function(xhr) {
                     if (xhr.lengthComputable) {
@@ -1236,6 +1265,7 @@
             animateFish(time);
             updateSeaweed(time);
             animateCaustics(time);
+            animateFloatingModule(time);  // FLOATING: Gentle bobbing animation
             
             renderer.render(scene, camera);
         }
@@ -1349,6 +1379,28 @@
                 caustic.position.z = Math.cos(time * data.speedZ + data.phaseZ) * (0.6 + index * 0.25);
                 caustic.rotation.z = Math.sin(time * 0.08 + index) * 0.02;
             });
+        }
+        
+        // ============================================================
+        // FLOATING MODULE ANIMATION
+        // Gentle bobbing motion to simulate the module floating/suspended
+        // in the water column for visualization purposes
+        // ============================================================
+        function animateFloatingModule(time) {
+            if (!reefModel) return;
+            
+            // Subtle up-down bobbing motion (like floating in water)
+            const bobOffset = Math.sin(time * MODULE_BOB_SPEED) * MODULE_BOB_AMPLITUDE;
+            
+            // Secondary slower wave for more natural movement
+            const secondaryBob = Math.sin(time * MODULE_BOB_SPEED * 0.6 + 1.5) * MODULE_BOB_AMPLITUDE * 0.3;
+            
+            // Apply vertical bobbing
+            reefModel.position.y = reefBaseY + bobOffset + secondaryBob;
+            
+            // Very subtle rotation sway (as if gently rocked by current)
+            reefModel.rotation.x = Math.sin(time * MODULE_SWAY_SPEED) * MODULE_SWAY_AMPLITUDE;
+            reefModel.rotation.z = Math.cos(time * MODULE_SWAY_SPEED * 0.8 + 0.5) * MODULE_SWAY_AMPLITUDE * 0.7;
         }
         
         // ============================================================
