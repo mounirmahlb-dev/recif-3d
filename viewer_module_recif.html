@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Artificial Reef Module – Beni Saf, Algeria</title>
+    <title>Artificial Reef Module – Béni Saf, Algeria</title>
     <style>
         * {
             margin: 0;
@@ -18,60 +18,166 @@
         canvas {
             display: block;
         }
+        
+        /* ============================================================
+           IMPROVED: Scientific Information Overlay (top-left)
+           Professional styling with semi-transparent background
+           ============================================================ */
         #info-overlay {
             position: absolute;
             top: 20px;
             left: 20px;
+            max-width: 380px;
+            background: rgba(5, 35, 50, 0.85);
+            backdrop-filter: blur(8px);
+            -webkit-backdrop-filter: blur(8px);
+            border: 1px solid rgba(100, 180, 200, 0.3);
+            border-radius: 12px;
+            padding: 18px 22px;
             color: #e0f7fa;
-            text-shadow: 2px 2px 4px rgba(0,0,0,0.6);
             z-index: 100;
-            pointer-events: none;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.4);
         }
         #info-overlay h1 {
-            font-size: 1.6rem;
-            margin-bottom: 8px;
+            font-size: 1.25rem;
+            margin-bottom: 12px;
             font-weight: 600;
+            letter-spacing: 0.3px;
+            color: #80deea;
+            border-bottom: 1px solid rgba(100, 180, 200, 0.3);
+            padding-bottom: 10px;
+        }
+        #info-overlay h1 .flag {
+            font-size: 1.1rem;
+            margin-right: 6px;
+        }
+        #info-overlay .description {
+            font-size: 0.85rem;
+            line-height: 1.55;
+            opacity: 0.92;
+            margin-bottom: 12px;
+        }
+        #info-overlay .specs {
+            font-size: 0.78rem;
+            background: rgba(0, 60, 80, 0.5);
+            border-radius: 6px;
+            padding: 10px 12px;
+            margin-top: 10px;
+        }
+        #info-overlay .specs-title {
+            font-weight: 600;
+            color: #4dd0e1;
+            margin-bottom: 6px;
+            font-size: 0.8rem;
+            text-transform: uppercase;
             letter-spacing: 0.5px;
         }
-        #info-overlay p {
-            font-size: 0.95rem;
-            opacity: 0.9;
+        #info-overlay .specs ul {
+            list-style: none;
+            padding: 0;
         }
+        #info-overlay .specs li {
+            padding: 3px 0;
+            opacity: 0.88;
+        }
+        #info-overlay .specs li::before {
+            content: "▸ ";
+            color: #4dd0e1;
+            font-size: 0.7rem;
+        }
+        
+        /* Controls hint (bottom-center) */
         #controls-hint {
             position: absolute;
             bottom: 25px;
             left: 50%;
             transform: translateX(-50%);
             color: #b2ebf2;
-            font-size: 0.9rem;
-            text-shadow: 1px 1px 3px rgba(0,0,0,0.6);
+            font-size: 0.85rem;
             z-index: 100;
-            background: rgba(0,40,60,0.4);
-            padding: 8px 20px;
-            border-radius: 20px;
+            background: rgba(5, 35, 50, 0.75);
+            backdrop-filter: blur(6px);
+            -webkit-backdrop-filter: blur(6px);
+            padding: 10px 24px;
+            border-radius: 25px;
+            border: 1px solid rgba(100, 180, 200, 0.25);
             pointer-events: none;
+            box-shadow: 0 2px 12px rgba(0, 0, 0, 0.3);
         }
+        
+        /* Depth indicator (bottom-right) */
+        #depth-indicator {
+            position: absolute;
+            bottom: 25px;
+            right: 25px;
+            background: rgba(5, 35, 50, 0.8);
+            backdrop-filter: blur(6px);
+            -webkit-backdrop-filter: blur(6px);
+            border: 1px solid rgba(100, 180, 200, 0.3);
+            border-radius: 10px;
+            padding: 12px 16px;
+            color: #80deea;
+            font-size: 0.9rem;
+            z-index: 100;
+            text-align: center;
+        }
+        #depth-indicator .depth-value {
+            font-size: 1.5rem;
+            font-weight: 600;
+            color: #4dd0e1;
+        }
+        #depth-indicator .depth-label {
+            font-size: 0.7rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            opacity: 0.8;
+            margin-top: 2px;
+        }
+        
+        /* Loading indicator */
         #loading {
             position: absolute;
             top: 50%;
             left: 50%;
             transform: translate(-50%, -50%);
             color: #e0f7fa;
-            font-size: 1.3rem;
+            font-size: 1.2rem;
             z-index: 100;
             text-align: center;
+            background: rgba(5, 35, 50, 0.9);
+            padding: 30px 40px;
+            border-radius: 15px;
+            border: 1px solid rgba(100, 180, 200, 0.3);
         }
         #loading .spinner {
-            width: 40px;
-            height: 40px;
-            border: 3px solid rgba(255,255,255,0.2);
+            width: 45px;
+            height: 45px;
+            border: 3px solid rgba(255,255,255,0.15);
             border-top-color: #4dd0e1;
             border-radius: 50%;
-            margin: 15px auto;
+            margin: 0 auto 18px auto;
             animation: spin 1s linear infinite;
         }
         @keyframes spin {
             to { transform: rotate(360deg); }
+        }
+        
+        /* Mobile responsiveness */
+        @media (max-width: 500px) {
+            #info-overlay {
+                max-width: calc(100% - 40px);
+                padding: 14px 16px;
+                font-size: 0.9rem;
+            }
+            #info-overlay h1 {
+                font-size: 1.1rem;
+            }
+            #info-overlay .description {
+                font-size: 0.8rem;
+            }
+            #depth-indicator {
+                bottom: 70px;
+            }
         }
     </style>
     
@@ -81,14 +187,37 @@
     <script src="https://cdn.jsdelivr.net/npm/three@0.134.0/examples/js/loaders/GLTFLoader.js"></script>
 </head>
 <body>
-    <!-- Title and info overlay (top-left) -->
+    <!-- ============================================================
+         IMPROVED: Scientific Information Overlay
+         Contains project title, description, and technical specs
+         ============================================================ -->
     <div id="info-overlay">
-        <h1>🐟 Artificial Reef Module – Beni Saf, Algeria</h1>
-        <p>Concrete cube with tunnels – depth ~20 m</p>
+        <h1><span class="flag">🇩🇿</span> Artificial Reef Module – Béni Saf</h1>
+        <div class="description">
+            Marine-grade concrete module designed to enhance benthic habitat complexity 
+            near the brine discharge point of the <strong>Béni Saf desalination plant</strong> 
+            (Gulf of Oran, Algeria). The hollow structure with circular tunnels provides 
+            shelter for juvenile fish and substrate for sessile invertebrates.
+        </div>
+        <div class="specs">
+            <div class="specs-title">📐 Technical Specifications</div>
+            <ul>
+                <li>Dimensions: 1 m × 1 m × 1 m cube</li>
+                <li>Material: Marine-grade reinforced concrete</li>
+                <li>Deployment depth: ~20 m (sandy bottom)</li>
+                <li>Purpose: Habitat restoration & biodiversity enhancement</li>
+            </ul>
+        </div>
     </div>
     
     <!-- Controls hint (bottom-center) -->
-    <div id="controls-hint">🖱️ Drag to rotate – Scroll to zoom</div>
+    <div id="controls-hint">🖱️ Drag to rotate &nbsp;•&nbsp; Scroll to zoom</div>
+    
+    <!-- Depth indicator (bottom-right) -->
+    <div id="depth-indicator">
+        <div class="depth-value">~20m</div>
+        <div class="depth-label">Deployment Depth</div>
+    </div>
     
     <!-- Loading indicator -->
     <div id="loading">
@@ -106,63 +235,66 @@
         // Change this if your GLB filename is different
         const MODEL_PATH = 'module_recif.glb';
         
-        // --- WATER / FOG COLORS ---
-        // Adjust these to change the underwater atmosphere
-        const WATER_COLOR = 0x0e4d64;        // Background color (deep blue-green)
-        const WATER_COLOR_LIGHT = 0x1a6b8a;  // Lighter water for gradient effect
-        const FOG_COLOR = 0x0e5570;          // Fog color (blue-green)
-        const FOG_NEAR = 8;                  // Where fog starts
-        const FOG_FAR = 60;                  // Where fog becomes fully opaque
+        // ============================================================
+        // IMPROVED: Water / Fog Colors for realistic ~20m depth
+        // Coastal Mediterranean blue-green, slightly turbid
+        // ============================================================
+        const WATER_COLOR = 0x0b4a5c;        // Deep coastal blue-green (IMPROVED)
+        const WATER_COLOR_LIGHT = 0x1a6a85;  // Lighter water for gradient
+        const FOG_COLOR = 0x0d5065;          // Fog color - matches water (IMPROVED)
+        const FOG_NEAR = 10;                 // Where fog starts (IMPROVED - more visibility)
+        const FOG_FAR = 55;                  // Where fog becomes opaque (IMPROVED)
         
         // --- CAMERA SETTINGS ---
-        // Adjust starting position and zoom limits
-        const CAMERA_START_DISTANCE = 10;     // Initial distance from reef
-        const CAMERA_START_HEIGHT = 2;        // Height offset
-        const CAMERA_MIN_DISTANCE = 4;        // Closest zoom
-        const CAMERA_MAX_DISTANCE = 30;       // Farthest zoom
+        const CAMERA_START_DISTANCE = 9;      // Initial distance (IMPROVED - closer)
+        const CAMERA_START_HEIGHT = 1.5;      // Height offset (IMPROVED)
+        const CAMERA_MIN_DISTANCE = 3;        // Closest zoom (IMPROVED)
+        const CAMERA_MAX_DISTANCE = 28;       // Farthest zoom
         
         // ============================================================
         // GLOBAL VARIABLES
         // ============================================================
         let scene, camera, renderer;
-        let reefGroup;              // Parent group for rotation control
-        let particles;              // Floating plankton particles
-        let fishes = [];            // Improved realistic fish
-        let seaweedClusters = [];   // Animated seaweed/algae clusters
-        let causticPlane;           // Light caustics effect
+        let reefGroup;
+        let particles;
+        let fishes = [];
+        let seaweedClusters = [];
+        let causticMeshes = [];          // IMPROVED: Multiple caustic layers
         let cameraDistance = CAMERA_START_DISTANCE;
         
         // ============================================================
-        // FISH SPECIES CONFIGURATION
-        // Natural Mediterranean/Atlantic species colors
+        // IMPROVED: Fish Species Configuration
+        // More realistic Mediterranean/Atlantic species colors
         // ============================================================
         const FISH_SPECIES = [
-            { name: 'grey_mullet', bodyColor: 0x7a8a8a, finColor: 0x5a6a6a, bellyColor: 0x9aa8a8, size: 1.0 },
-            { name: 'sea_bream', bodyColor: 0x8a7a6a, finColor: 0x6a5a4a, bellyColor: 0xb0a090, size: 0.85 },
-            { name: 'grouper', bodyColor: 0x5a5a4a, finColor: 0x3a3a2a, bellyColor: 0x7a7a6a, size: 1.3 },
-            { name: 'damselfish', bodyColor: 0x4a5a6a, finColor: 0x3a4a5a, bellyColor: 0x6a7a8a, size: 0.5 },
-            { name: 'wrasse', bodyColor: 0x6a6a5a, finColor: 0x5a5a4a, bellyColor: 0x8a8a7a, size: 0.65 },
-            { name: 'bass', bodyColor: 0x6a7a7a, finColor: 0x4a5a5a, bellyColor: 0x9aaaaa, size: 1.1 }
+            { name: 'grey_mullet', bodyColor: 0x6a7a7a, finColor: 0x4a5a5a, bellyColor: 0x8a9898, size: 0.9 },
+            { name: 'sea_bream', bodyColor: 0x7a6a5a, finColor: 0x5a4a3a, bellyColor: 0xa09080, size: 0.75 },
+            { name: 'grouper', bodyColor: 0x4a4a3a, finColor: 0x3a3a2a, bellyColor: 0x6a6a5a, size: 1.2 },
+            { name: 'damselfish', bodyColor: 0x3a4a5a, finColor: 0x2a3a4a, bellyColor: 0x5a6a7a, size: 0.45 },
+            { name: 'wrasse', bodyColor: 0x5a5a4a, finColor: 0x4a4a3a, bellyColor: 0x7a7a6a, size: 0.55 },
+            { name: 'bass', bodyColor: 0x5a6a6a, finColor: 0x3a4a4a, bellyColor: 0x8a9a9a, size: 1.0 },
+            { name: 'comber', bodyColor: 0x6a5a4a, finColor: 0x4a3a2a, bellyColor: 0x9a8a7a, size: 0.6 }
         ];
         
         // ============================================================
-        // SEAWEED/ALGAE SPECIES CONFIGURATION
-        // Mediterranean benthic vegetation types
+        // IMPROVED: Seaweed/Algae Species Configuration
+        // Mediterranean benthic vegetation - more variety
         // ============================================================
         const SEAWEED_TYPES = [
-            { name: 'posidonia', color: 0x3a6a4a, height: 1.2, width: 0.04, blades: 8, curve: 0.3 },
-            { name: 'caulerpa', color: 0x2a5a3a, height: 0.5, width: 0.025, blades: 12, curve: 0.15 },
-            { name: 'padina', color: 0x6a5a4a, height: 0.35, width: 0.08, blades: 5, curve: 0.4 },
-            { name: 'cystoseira', color: 0x4a4a3a, height: 0.9, width: 0.02, blades: 15, curve: 0.25 },
-            { name: 'ulva', color: 0x4a7a5a, height: 0.4, width: 0.06, blades: 6, curve: 0.5 },
-            { name: 'dictyota', color: 0x5a5a4a, height: 0.6, width: 0.035, blades: 10, curve: 0.35 }
+            { name: 'posidonia', color: 0x3a5a4a, height: 1.3, width: 0.045, blades: 9, curve: 0.25 },
+            { name: 'caulerpa', color: 0x2a4a3a, height: 0.55, width: 0.028, blades: 14, curve: 0.12 },
+            { name: 'padina', color: 0x5a4a3a, height: 0.38, width: 0.09, blades: 5, curve: 0.35 },
+            { name: 'cystoseira', color: 0x3a3a2a, height: 1.0, width: 0.022, blades: 16, curve: 0.2 },
+            { name: 'ulva', color: 0x4a6a5a, height: 0.45, width: 0.065, blades: 7, curve: 0.4 },
+            { name: 'dictyota', color: 0x4a4a3a, height: 0.65, width: 0.038, blades: 11, curve: 0.28 },
+            { name: 'halopteris', color: 0x3a4a3a, height: 0.5, width: 0.015, blades: 20, curve: 0.18 }
         ];
         
         // Mouse interaction
         let isDragging = false;
         let previousMousePosition = { x: 0, y: 0 };
-        let rotationX = 0.3;        // Initial vertical tilt
-        let rotationY = 0.5;        // Initial horizontal rotation
+        let rotationX = 0.25;
+        let rotationY = 0.4;
         
         // ============================================================
         // INITIALIZATION
@@ -175,7 +307,7 @@
             
             // Create perspective camera
             camera = new THREE.PerspectiveCamera(
-                55,
+                50,  // IMPROVED: Slightly narrower FOV for less distortion
                 window.innerWidth / window.innerHeight,
                 0.1,
                 150
@@ -189,7 +321,7 @@
             renderer.shadowMap.enabled = true;
             renderer.shadowMap.type = THREE.PCFSoftShadowMap;
             renderer.toneMapping = THREE.ACESFilmicToneMapping;
-            renderer.toneMappingExposure = 1.0;
+            renderer.toneMappingExposure = 0.95;  // IMPROVED: Slightly darker
             document.body.appendChild(renderer.domElement);
             
             // Setup scene elements
@@ -200,7 +332,7 @@
             createFish();
             createCaustics();
             
-            // Create parent group for reef model (enables rotation)
+            // Create parent group for reef model
             reefGroup = new THREE.Group();
             scene.add(reefGroup);
             
@@ -215,67 +347,77 @@
         }
         
         // ============================================================
-        // LIGHTING SETUP
+        // IMPROVED: Lighting Setup for realistic ~20m depth
+        // Balanced to show detail while maintaining underwater feel
         // ============================================================
         function setupLighting() {
-            // Ambient light with blue-green underwater tint
-            const ambientLight = new THREE.AmbientLight(0x3a8a9a, 0.5);
+            // Ambient light - slightly desaturated blue-green for depth
+            const ambientLight = new THREE.AmbientLight(0x4a8090, 0.45);
             scene.add(ambientLight);
             
-            // Hemisphere light for natural sky/ground gradient
-            const hemiLight = new THREE.HemisphereLight(0x87ceeb, 0x2a5a3a, 0.4);
+            // Hemisphere light - sky/seabed color gradient
+            const hemiLight = new THREE.HemisphereLight(0x6aacbc, 0x3a5a4a, 0.35);
             scene.add(hemiLight);
             
-            // Main directional light (sunlight filtering through water surface)
-            const sunLight = new THREE.DirectionalLight(0xa8d8e8, 1.5);
-            sunLight.position.set(10, 30, 10);
+            // IMPROVED: Main directional light (attenuated sunlight at 20m)
+            // At 20m, reds are largely absorbed, light is blue-green shifted
+            const sunLight = new THREE.DirectionalLight(0x8ac8d8, 1.3);
+            sunLight.position.set(8, 35, 12);
             sunLight.castShadow = true;
             sunLight.shadow.mapSize.width = 2048;
             sunLight.shadow.mapSize.height = 2048;
             sunLight.shadow.camera.near = 1;
             sunLight.shadow.camera.far = 60;
-            sunLight.shadow.camera.left = -20;
-            sunLight.shadow.camera.right = 20;
-            sunLight.shadow.camera.top = 20;
-            sunLight.shadow.camera.bottom = -20;
+            sunLight.shadow.camera.left = -18;
+            sunLight.shadow.camera.right = 18;
+            sunLight.shadow.camera.top = 18;
+            sunLight.shadow.camera.bottom = -18;
             sunLight.shadow.bias = -0.0001;
+            sunLight.shadow.normalBias = 0.02;
             scene.add(sunLight);
             
-            // Secondary light for fill (simulates scattered light)
-            const fillLight = new THREE.DirectionalLight(0x4a8a9a, 0.4);
-            fillLight.position.set(-5, 10, -10);
+            // Secondary fill light (scattered water light)
+            const fillLight = new THREE.DirectionalLight(0x5a9aaa, 0.35);
+            fillLight.position.set(-8, 15, -12);
             scene.add(fillLight);
             
-            // Subtle upward light (light bouncing from seafloor)
-            const bounceLight = new THREE.DirectionalLight(0xc4a882, 0.2);
-            bounceLight.position.set(0, -5, 0);
+            // Bounce light from sandy bottom
+            const bounceLight = new THREE.DirectionalLight(0xb09a72, 0.18);
+            bounceLight.position.set(0, -8, 0);
             scene.add(bounceLight);
+            
+            // IMPROVED: Subtle rim light for module visibility
+            const rimLight = new THREE.DirectionalLight(0x7abaca, 0.25);
+            rimLight.position.set(-5, 8, 15);
+            scene.add(rimLight);
         }
         
         // ============================================================
-        // SEAFLOOR
+        // IMPROVED: Seafloor - More realistic sandy texture appearance
         // ============================================================
         function createSeafloor() {
-            // Large sandy plane
-            const floorGeometry = new THREE.PlaneGeometry(120, 120, 80, 80);
+            // Large sandy plane with higher resolution for better normals
+            const floorGeometry = new THREE.PlaneGeometry(140, 140, 100, 100);
             
-            // Add vertex displacement for natural terrain
+            // IMPROVED: More natural vertex displacement (ripples + random)
             const positionAttribute = floorGeometry.getAttribute('position');
             for (let i = 0; i < positionAttribute.count; i++) {
                 const x = positionAttribute.getX(i);
                 const y = positionAttribute.getY(i);
-                // Perlin-like noise approximation
-                const noise = Math.sin(x * 0.3) * Math.cos(y * 0.3) * 0.15 +
-                              Math.sin(x * 0.7 + 1) * Math.cos(y * 0.5) * 0.08 +
-                              (Math.random() - 0.5) * 0.1;
-                positionAttribute.setZ(i, noise);
+                // Layered noise for natural sand ripples
+                const largeRipple = Math.sin(x * 0.2) * Math.cos(y * 0.25) * 0.12;
+                const medRipple = Math.sin(x * 0.5 + 0.5) * Math.cos(y * 0.4) * 0.08;
+                const smallRipple = Math.sin(x * 1.2) * Math.cos(y * 1.1) * 0.03;
+                const random = (Math.random() - 0.5) * 0.06;
+                positionAttribute.setZ(i, largeRipple + medRipple + smallRipple + random);
             }
             floorGeometry.computeVertexNormals();
             
+            // IMPROVED: Sandy material with better color
             const floorMaterial = new THREE.MeshStandardMaterial({
-                color: 0xc4a872,          // Sandy beige
-                roughness: 0.95,
-                metalness: 0.0,
+                color: 0xc8a878,          // Warm sandy beige
+                roughness: 0.92,
+                metalness: 0.02,
             });
             
             const floor = new THREE.Mesh(floorGeometry, floorMaterial);
@@ -284,56 +426,84 @@
             floor.receiveShadow = true;
             scene.add(floor);
             
-            // Add some seagrass patches (simple planes)
+            // IMPROVED: Add sand mounds/dunes near the module
+            createSandMounds();
+            
+            // Create seagrass
             createSeagrass();
         }
         
+        // IMPROVED: Add subtle sand mounds for more natural seafloor
+        function createSandMounds() {
+            const sandMaterial = new THREE.MeshStandardMaterial({
+                color: 0xc4a070,
+                roughness: 0.95,
+                metalness: 0.0
+            });
+            
+            const moundPositions = [
+                { x: 3, z: 4, sx: 2.5, sy: 0.25, sz: 2 },
+                { x: -4, z: 3, sx: 2, sy: 0.2, sz: 2.5 },
+                { x: 2, z: -4.5, sx: 3, sy: 0.3, sz: 2 },
+                { x: -3.5, z: -3, sx: 2, sy: 0.22, sz: 2 },
+                { x: 5.5, z: -1, sx: 1.8, sy: 0.18, sz: 1.5 }
+            ];
+            
+            moundPositions.forEach(pos => {
+                const moundGeom = new THREE.SphereGeometry(1, 12, 8);
+                const mound = new THREE.Mesh(moundGeom, sandMaterial);
+                mound.scale.set(pos.sx, pos.sy, pos.sz);
+                mound.position.set(pos.x, -2 + pos.sy * 0.3, pos.z);
+                mound.receiveShadow = true;
+                scene.add(mound);
+            });
+        }
+        
         // ============================================================
-        // IMPROVED SEAWEED / ALGAE SYSTEM
-        // Realistic segmented blades with animation
+        // IMPROVED: Seaweed / Algae System
+        // More natural appearance with better colors and motion
         // ============================================================
         function createSeagrass() {
-            // This function now creates improved seaweed clusters
             createAllSeaweed();
         }
         
         function createSeaweedBlade(type, sizeVariation) {
             const blade = new THREE.Group();
-            const segments = 6 + Math.floor(Math.random() * 4);
+            const segments = 7 + Math.floor(Math.random() * 5);
             const segmentHeight = (type.height * sizeVariation) / segments;
             const segmentArray = [];
             
-            // Create color with natural variation
+            // IMPROVED: More natural color variation
             const baseColor = new THREE.Color(type.color);
             const hsl = {};
             baseColor.getHSL(hsl);
-            hsl.l += (Math.random() - 0.5) * 0.12;
-            hsl.s = Math.max(0.15, Math.min(0.5, hsl.s + (Math.random() - 0.5) * 0.15));
+            // Subtle variation in hue, saturation, and lightness
+            hsl.h += (Math.random() - 0.5) * 0.03;
+            hsl.l += (Math.random() - 0.5) * 0.1;
+            hsl.s = Math.max(0.12, Math.min(0.45, hsl.s + (Math.random() - 0.5) * 0.12));
             baseColor.setHSL(hsl.h, hsl.s, hsl.l);
             
             const material = new THREE.MeshStandardMaterial({
                 color: baseColor,
-                roughness: 0.75,
+                roughness: 0.7,
                 metalness: 0.0,
                 side: THREE.DoubleSide,
                 transparent: true,
-                opacity: 0.88
+                opacity: 0.9
             });
             
             let parentSegment = blade;
             
             for (let i = 0; i < segments; i++) {
-                // Width tapers toward tip naturally
-                const taper = 1 - Math.pow(i / segments, 1.5) * 0.7;
-                const segWidth = type.width * sizeVariation * taper * (0.85 + Math.random() * 0.3);
+                const taper = 1 - Math.pow(i / segments, 1.4) * 0.75;
+                const segWidth = type.width * sizeVariation * taper * (0.8 + Math.random() * 0.4);
                 
-                // Create curved segment geometry
                 const shape = new THREE.Shape();
                 const halfW = segWidth / 2;
                 shape.moveTo(-halfW, 0);
-                shape.quadraticCurveTo(-halfW * 0.8, segmentHeight * 0.5, -halfW * 0.6, segmentHeight);
-                shape.lineTo(halfW * 0.6, segmentHeight);
-                shape.quadraticCurveTo(halfW * 0.8, segmentHeight * 0.5, halfW, 0);
+                shape.quadraticCurveTo(-halfW * 0.85, segmentHeight * 0.5, -halfW * 0.55, segmentHeight);
+                shape.lineTo(halfW * 0.55, segmentHeight);
+                shape.quadraticCurveTo(halfW * 0.85, segmentHeight * 0.5, halfW, 0);
                 shape.closePath();
                 
                 const geom = new THREE.ShapeGeometry(shape);
@@ -341,8 +511,8 @@
                 
                 segment.userData = {
                     index: i,
-                    baseRotationX: (Math.random() - 0.5) * 0.08,
-                    baseRotationZ: (Math.random() - 0.5) * 0.05
+                    baseRotationX: (Math.random() - 0.5) * 0.06,
+                    baseRotationZ: (Math.random() - 0.5) * 0.04
                 };
                 
                 if (i === 0) {
@@ -360,8 +530,8 @@
                 segments: segmentArray,
                 type: type,
                 phaseOffset: Math.random() * Math.PI * 2,
-                swaySpeed: 0.4 + Math.random() * 0.4,
-                swayAmount: type.curve * (0.7 + Math.random() * 0.6)
+                swaySpeed: 0.25 + Math.random() * 0.25,  // IMPROVED: Slower, gentler sway
+                swayAmount: type.curve * (0.6 + Math.random() * 0.5)
             };
             
             return blade;
@@ -373,19 +543,16 @@
             
             for (let i = 0; i < bladeCount; i++) {
                 const type = types[Math.floor(Math.random() * types.length)];
-                const sizeVar = 0.6 + Math.random() * 0.8;
+                const sizeVar = 0.55 + Math.random() * 0.9;
                 const blade = createSeaweedBlade(type, sizeVar);
                 
-                // Distribute blades in natural cluster pattern
-                const angle = (i / bladeCount) * Math.PI * 2 + (Math.random() - 0.5) * 0.8;
-                const radius = 0.05 + Math.random() * 0.25;
+                const angle = (i / bladeCount) * Math.PI * 2 + (Math.random() - 0.5) * 0.9;
+                const radius = 0.04 + Math.random() * 0.28;
                 blade.position.x = Math.cos(angle) * radius;
                 blade.position.z = Math.sin(angle) * radius;
                 blade.rotation.y = Math.random() * Math.PI * 2;
-                
-                // Slight outward lean
-                blade.rotation.x = (Math.random() - 0.3) * 0.15;
-                blade.rotation.z = (Math.random() - 0.5) * 0.1;
+                blade.rotation.x = (Math.random() - 0.35) * 0.12;
+                blade.rotation.z = (Math.random() - 0.5) * 0.08;
                 
                 cluster.add(blade);
             }
@@ -394,78 +561,70 @@
         }
         
         function createAllSeaweed() {
-            // Clear any existing seaweed
             seaweedClusters.forEach(cluster => scene.remove(cluster));
             seaweedClusters = [];
             
             // Dense clusters around the reef module base
             const moduleBasePositions = [
-                { x: 1.6, z: 1.6 }, { x: -1.6, z: 1.6 }, { x: 1.6, z: -1.6 }, { x: -1.6, z: -1.6 },
-                { x: 2.0, z: 0 }, { x: -2.0, z: 0 }, { x: 0, z: 2.0 }, { x: 0, z: -2.0 },
-                { x: 2.3, z: 0.8 }, { x: -2.3, z: -0.8 }, { x: 0.8, z: 2.3 }, { x: -0.8, z: -2.3 },
-                { x: 1.9, z: -1.2 }, { x: -1.9, z: 1.2 }
+                { x: 1.5, z: 1.5 }, { x: -1.5, z: 1.5 }, { x: 1.5, z: -1.5 }, { x: -1.5, z: -1.5 },
+                { x: 1.9, z: 0 }, { x: -1.9, z: 0 }, { x: 0, z: 1.9 }, { x: 0, z: -1.9 },
+                { x: 2.2, z: 0.7 }, { x: -2.2, z: -0.7 }, { x: 0.7, z: 2.2 }, { x: -0.7, z: -2.2 },
+                { x: 1.8, z: -1.1 }, { x: -1.8, z: 1.1 },
+                { x: 2.4, z: 1.3 }, { x: -2.4, z: -1.3 }
             ];
             
-            // Clusters near existing rocks
+            // Clusters near rocks
             const nearRockPositions = [
-                { x: 5.2, z: 4.3 }, { x: 4.6, z: 3.6 },
-                { x: -4.3, z: 5.2 }, { x: -5.0, z: 4.5 },
-                { x: -5.7, z: -2.7 }, { x: -6.3, z: -3.4 },
-                { x: 6.3, z: -4.7 }, { x: 5.5, z: -5.3 },
-                { x: 3.3, z: -5.7 }, { x: 2.5, z: -6.3 },
-                { x: -2.8, z: -5.2 }, { x: -3.4, z: -5.8 },
-                { x: 7.2, z: 0.7 }, { x: 7.8, z: 1.3 },
-                { x: -6.7, z: 1.7 }, { x: -7.3, z: 2.3 }
+                { x: 5.0, z: 4.2 }, { x: 4.4, z: 3.5 },
+                { x: -4.2, z: 5.0 }, { x: -4.8, z: 4.3 },
+                { x: -5.5, z: -2.6 }, { x: -6.1, z: -3.2 },
+                { x: 6.1, z: -4.5 }, { x: 5.3, z: -5.1 },
+                { x: 3.2, z: -5.5 }, { x: 2.4, z: -6.1 },
+                { x: -2.7, z: -5.0 }, { x: -3.3, z: -5.6 },
+                { x: 7.0, z: 0.6 }, { x: 7.6, z: 1.2 },
+                { x: -6.5, z: 1.6 }, { x: -7.1, z: 2.2 }
             ];
             
-            // Scattered patches across seafloor
+            // Scattered patches
             const scatteredPositions = [];
-            for (let i = 0; i < 12; i++) {
-                const angle = (i / 12) * Math.PI * 2;
-                const dist = 8 + Math.random() * 6;
+            for (let i = 0; i < 16; i++) {
+                const angle = (i / 16) * Math.PI * 2;
+                const dist = 7 + Math.random() * 7;
                 scatteredPositions.push({
-                    x: Math.cos(angle) * dist + (Math.random() - 0.5) * 3,
-                    z: Math.sin(angle) * dist + (Math.random() - 0.5) * 3
+                    x: Math.cos(angle) * dist + (Math.random() - 0.5) * 3.5,
+                    z: Math.sin(angle) * dist + (Math.random() - 0.5) * 3.5
                 });
             }
             
-            // Create dense posidonia-style meadow near module
+            // Posidonia meadow near module
             const meadowTypes = [SEAWEED_TYPES[0], SEAWEED_TYPES[1], SEAWEED_TYPES[4]];
             moduleBasePositions.forEach(pos => {
-                const cluster = createSeaweedCluster(
-                    pos.x, pos.z,
-                    meadowTypes,
-                    6 + Math.floor(Math.random() * 5)
-                );
+                const cluster = createSeaweedCluster(pos.x, pos.z, meadowTypes, 7 + Math.floor(Math.random() * 5));
                 scene.add(cluster);
                 seaweedClusters.push(cluster);
             });
             
             // Brown/mixed algae near rocks
-            const rockTypes = [SEAWEED_TYPES[2], SEAWEED_TYPES[3], SEAWEED_TYPES[5]];
+            const rockTypes = [SEAWEED_TYPES[2], SEAWEED_TYPES[3], SEAWEED_TYPES[5], SEAWEED_TYPES[6]];
             nearRockPositions.forEach(pos => {
-                const cluster = createSeaweedCluster(
-                    pos.x, pos.z,
-                    rockTypes,
-                    4 + Math.floor(Math.random() * 4)
-                );
+                const cluster = createSeaweedCluster(pos.x, pos.z, rockTypes, 5 + Math.floor(Math.random() * 4));
                 scene.add(cluster);
                 seaweedClusters.push(cluster);
             });
             
-            // Mixed scattered vegetation
+            // Scattered
             scatteredPositions.forEach(pos => {
-                const cluster = createSeaweedCluster(
-                    pos.x, pos.z,
-                    SEAWEED_TYPES,
-                    3 + Math.floor(Math.random() * 4)
-                );
+                const cluster = createSeaweedCluster(pos.x, pos.z, SEAWEED_TYPES, 4 + Math.floor(Math.random() * 4));
                 scene.add(cluster);
                 seaweedClusters.push(cluster);
             });
         }
         
+        // IMPROVED: Gentler, more realistic current-driven sway
         function updateSeaweed(time) {
+            // Global current direction varies slowly
+            const currentDir = Math.sin(time * 0.08) * 0.3;
+            
             seaweedClusters.forEach(cluster => {
                 cluster.children.forEach(blade => {
                     if (!blade.userData || !blade.userData.segments) return;
@@ -473,21 +632,19 @@
                     const { segments, phaseOffset, swaySpeed, swayAmount } = blade.userData;
                     
                     segments.forEach((segment, i) => {
-                        // Progressive sway - more at tips, simulating water current
-                        const influence = Math.pow((i + 1) / segments.length, 1.3);
+                        const influence = Math.pow((i + 1) / segments.length, 1.4);
                         const baseData = segment.userData;
                         
-                        // Primary sway (main current direction)
-                        const primarySway = Math.sin(time * swaySpeed + phaseOffset + i * 0.25) 
-                                          * swayAmount * influence;
+                        // IMPROVED: Smoother, more natural sway
+                        const primarySway = Math.sin(time * swaySpeed + phaseOffset + i * 0.2) 
+                                          * swayAmount * influence
+                                          + currentDir * influence * 0.15;
                         
-                        // Secondary cross-sway (turbulence)
-                        const crossSway = Math.cos(time * swaySpeed * 0.6 + phaseOffset * 1.3 + i * 0.18) 
-                                        * swayAmount * 0.4 * influence;
+                        const crossSway = Math.cos(time * swaySpeed * 0.5 + phaseOffset * 1.2 + i * 0.15) 
+                                        * swayAmount * 0.3 * influence;
                         
-                        // Subtle twist
-                        const twist = Math.sin(time * swaySpeed * 0.4 + phaseOffset + i * 0.4) 
-                                    * 0.03 * influence;
+                        const twist = Math.sin(time * swaySpeed * 0.3 + phaseOffset + i * 0.35) 
+                                    * 0.02 * influence;
                         
                         segment.rotation.z = baseData.baseRotationZ + primarySway;
                         segment.rotation.x = baseData.baseRotationX + crossSway;
@@ -498,55 +655,46 @@
         }
         
         // ============================================================
-        // ROCKS / BOULDERS
+        // IMPROVED: Rocks with better variety and colors
         // ============================================================
         function createRocks() {
-            const rockColors = [0x5a6a5a, 0x6b7b6a, 0x4a5a4a, 0x707a70];
+            const rockColors = [0x505a50, 0x5a6a5a, 0x4a5a4a, 0x606a60, 0x556555];
             
             const rockPositions = [
-                { x: 5, z: 4, scale: 1.0, rotation: 0.3 },
-                { x: -4.5, z: 5, scale: 1.4, rotation: 1.2 },
-                { x: -6, z: -3, scale: 0.7, rotation: 2.1 },
-                { x: 6, z: -5, scale: 1.2, rotation: 0.8 },
-                { x: 3, z: -6, scale: 0.6, rotation: 1.5 },
-                { x: -3, z: -5.5, scale: 0.9, rotation: 2.8 },
-                { x: 7.5, z: 1, scale: 0.5, rotation: 0.5 },
-                { x: -7, z: 2, scale: 0.8, rotation: 1.9 }
+                { x: 5, z: 4, scale: 1.1, rotation: 0.3 },
+                { x: -4.5, z: 5, scale: 1.5, rotation: 1.2 },
+                { x: -6, z: -3, scale: 0.8, rotation: 2.1 },
+                { x: 6, z: -5, scale: 1.3, rotation: 0.8 },
+                { x: 3, z: -6, scale: 0.65, rotation: 1.5 },
+                { x: -3, z: -5.5, scale: 1.0, rotation: 2.8 },
+                { x: 7.5, z: 1, scale: 0.55, rotation: 0.5 },
+                { x: -7, z: 2, scale: 0.9, rotation: 1.9 },
+                { x: 4, z: -2, scale: 0.45, rotation: 0.7 },
+                { x: -5, z: -0.5, scale: 0.5, rotation: 2.3 }
             ];
             
             rockPositions.forEach((pos, index) => {
                 const rockMaterial = new THREE.MeshStandardMaterial({
                     color: rockColors[index % rockColors.length],
-                    roughness: 0.9,
-                    metalness: 0.1
+                    roughness: 0.88,
+                    metalness: 0.08
                 });
                 
-                // Use icosahedron for rock shape
                 const geometry = new THREE.IcosahedronGeometry(pos.scale, 1);
                 
-                // Deform vertices for natural irregular shape
                 const positionAttr = geometry.getAttribute('position');
                 for (let i = 0; i < positionAttr.count; i++) {
                     const x = positionAttr.getX(i);
                     const y = positionAttr.getY(i);
                     const z = positionAttr.getZ(i);
-                    const noise = 0.7 + Math.random() * 0.5;
-                    positionAttr.setXYZ(
-                        i,
-                        x * noise,
-                        y * noise * 0.5,  // Flatten vertically
-                        z * noise
-                    );
+                    const noise = 0.65 + Math.random() * 0.55;
+                    positionAttr.setXYZ(i, x * noise, y * noise * 0.45, z * noise);
                 }
                 geometry.computeVertexNormals();
                 
                 const rock = new THREE.Mesh(geometry, rockMaterial);
-                rock.position.set(pos.x, -1.6, pos.z);
-                rock.rotation.set(
-                    Math.random() * 0.5,
-                    pos.rotation,
-                    Math.random() * 0.3
-                );
+                rock.position.set(pos.x, -1.55, pos.z);
+                rock.rotation.set(Math.random() * 0.5, pos.rotation, Math.random() * 0.3);
                 rock.castShadow = true;
                 rock.receiveShadow = true;
                 scene.add(rock);
@@ -554,24 +702,25 @@
         }
         
         // ============================================================
-        // FLOATING PARTICLES (Plankton / Marine Snow)
+        // IMPROVED: Floating Particles (Marine Snow / Plankton)
+        // More realistic size and motion
         // ============================================================
         function createParticles() {
-            const particleCount = 800;
+            const particleCount = 1000;
             const geometry = new THREE.BufferGeometry();
             const positions = new Float32Array(particleCount * 3);
             const sizes = new Float32Array(particleCount);
             const velocities = [];
             
             for (let i = 0; i < particleCount; i++) {
-                positions[i * 3] = (Math.random() - 0.5) * 50;
-                positions[i * 3 + 1] = Math.random() * 25 - 3;
-                positions[i * 3 + 2] = (Math.random() - 0.5) * 50;
-                sizes[i] = Math.random() * 0.08 + 0.02;
+                positions[i * 3] = (Math.random() - 0.5) * 55;
+                positions[i * 3 + 1] = Math.random() * 28 - 4;
+                positions[i * 3 + 2] = (Math.random() - 0.5) * 55;
+                sizes[i] = Math.random() * 0.06 + 0.015;
                 velocities.push({
-                    y: 0.003 + Math.random() * 0.008,
-                    xDrift: (Math.random() - 0.5) * 0.002,
-                    zDrift: (Math.random() - 0.5) * 0.002,
+                    y: 0.002 + Math.random() * 0.006,
+                    xDrift: (Math.random() - 0.5) * 0.0015,
+                    zDrift: (Math.random() - 0.5) * 0.0015,
                     phase: Math.random() * Math.PI * 2
                 });
             }
@@ -581,10 +730,10 @@
             geometry.userData.velocities = velocities;
             
             const material = new THREE.PointsMaterial({
-                color: 0xaadddd,
-                size: 0.06,
+                color: 0x9acccc,
+                size: 0.055,
                 transparent: true,
-                opacity: 0.5,
+                opacity: 0.45,
                 sizeAttenuation: true,
                 blending: THREE.AdditiveBlending
             });
@@ -594,30 +743,54 @@
         }
         
         // ============================================================
-        // LIGHT CAUSTICS (Animated light patterns on seafloor)
+        // IMPROVED: Light Caustics System
+        // Multiple animated layers for realistic underwater light
         // ============================================================
         function createCaustics() {
-            const causticGeometry = new THREE.PlaneGeometry(80, 80);
-            const causticMaterial = new THREE.MeshBasicMaterial({
-                color: 0xffffff,
-                transparent: true,
-                opacity: 0.08,
-                blending: THREE.AdditiveBlending
-            });
+            // Create multiple caustic layers for complex pattern
+            const causticCount = 3;
             
-            causticPlane = new THREE.Mesh(causticGeometry, causticMaterial);
-            causticPlane.rotation.x = -Math.PI / 2;
-            causticPlane.position.y = -1.95;
-            scene.add(causticPlane);
+            for (let c = 0; c < causticCount; c++) {
+                const causticGeometry = new THREE.PlaneGeometry(90, 90, 20, 20);
+                
+                // Deform geometry for wave-like caustic pattern
+                const posAttr = causticGeometry.getAttribute('position');
+                for (let i = 0; i < posAttr.count; i++) {
+                    const x = posAttr.getX(i);
+                    const y = posAttr.getY(i);
+                    const wave = Math.sin(x * 0.3 + c) * Math.cos(y * 0.3 + c) * 0.15;
+                    posAttr.setZ(i, wave);
+                }
+                causticGeometry.computeVertexNormals();
+                
+                const causticMaterial = new THREE.MeshBasicMaterial({
+                    color: 0xffffff,
+                    transparent: true,
+                    opacity: 0.04 + c * 0.015,
+                    blending: THREE.AdditiveBlending,
+                    wireframe: c === 1  // Middle layer is wireframe for variation
+                });
+                
+                const caustic = new THREE.Mesh(causticGeometry, causticMaterial);
+                caustic.rotation.x = -Math.PI / 2;
+                caustic.position.y = -1.92 + c * 0.02;
+                caustic.userData = {
+                    speedX: 0.15 + c * 0.1,
+                    speedZ: 0.12 + c * 0.08,
+                    phaseX: c * 1.5,
+                    phaseZ: c * 0.8
+                };
+                scene.add(caustic);
+                causticMeshes.push(caustic);
+            }
         }
         
         // ============================================================
-        // IMPROVED REALISTIC FISH SYSTEM
-        // Anatomically plausible low-poly fish with animation
+        // IMPROVED: Realistic Fish System
+        // Better body shapes, natural colors, smooth swimming
         // ============================================================
         function createFish() {
-            // Create 5-7 individual fish of various species
-            const fishCount = 5 + Math.floor(Math.random() * 3);
+            const fishCount = 6 + Math.floor(Math.random() * 3);
             
             for (let i = 0; i < fishCount; i++) {
                 const species = FISH_SPECIES[i % FISH_SPECIES.length];
@@ -626,7 +799,6 @@
                 fishes.push(fish);
             }
             
-            // Add a realistic schooling group
             createFishSchool();
         }
         
@@ -634,200 +806,185 @@
             const fishGroup = new THREE.Group();
             const s = species.size;
             
-            // === BODY ===
-            // Create fish body using lathe geometry for smooth tapered shape
+            // Body using lathe geometry
             const bodyPoints = [];
-            const bodySegments = 12;
+            const bodySegments = 14;
             for (let i = 0; i <= bodySegments; i++) {
                 const t = i / bodySegments;
-                // Fish body profile: tapered at both ends, wider in middle-front
-                const x = t * s * 0.8;
+                const x = t * s * 0.85;
                 let r;
-                if (t < 0.35) {
-                    // Head tapering to snout
-                    r = Math.sin(t / 0.35 * Math.PI * 0.5) * s * 0.14;
-                } else if (t < 0.7) {
-                    // Main body (widest part)
-                    r = s * 0.14 * (1 - (t - 0.35) * 0.3);
+                if (t < 0.32) {
+                    r = Math.sin(t / 0.32 * Math.PI * 0.5) * s * 0.13;
+                } else if (t < 0.68) {
+                    r = s * 0.13 * (1 - (t - 0.32) * 0.25);
                 } else {
-                    // Tail section (narrow)
-                    r = s * 0.14 * 0.79 * (1 - (t - 0.7) / 0.3 * 0.7);
+                    r = s * 0.13 * 0.81 * (1 - (t - 0.68) / 0.32 * 0.75);
                 }
-                bodyPoints.push(new THREE.Vector2(r, x - s * 0.4));
+                bodyPoints.push(new THREE.Vector2(r, x - s * 0.42));
             }
             
-            const bodyGeom = new THREE.LatheGeometry(bodyPoints, 10);
+            const bodyGeom = new THREE.LatheGeometry(bodyPoints, 12);
             bodyGeom.rotateZ(Math.PI / 2);
             
-            // Slightly flatten body vertically for more realistic fish shape
             const bodyPositions = bodyGeom.getAttribute('position');
             for (let i = 0; i < bodyPositions.count; i++) {
                 const y = bodyPositions.getY(i);
-                bodyPositions.setY(i, y * 0.75);
+                bodyPositions.setY(i, y * 0.72);
             }
             bodyGeom.computeVertexNormals();
             
             const bodyMaterial = new THREE.MeshStandardMaterial({
                 color: species.bodyColor,
-                roughness: 0.55,
-                metalness: 0.15,
+                roughness: 0.5,
+                metalness: 0.12,
                 flatShading: false
             });
             
             const body = new THREE.Mesh(bodyGeom, bodyMaterial);
             fishGroup.add(body);
             
-            // === BELLY (lighter underside) ===
-            const bellyGeom = new THREE.SphereGeometry(s * 0.11, 8, 4, 0, Math.PI * 2, Math.PI * 0.5, Math.PI * 0.5);
+            // Belly
+            const bellyGeom = new THREE.SphereGeometry(s * 0.1, 10, 5, 0, Math.PI * 2, Math.PI * 0.5, Math.PI * 0.5);
             bellyGeom.rotateZ(Math.PI / 2);
-            bellyGeom.scale(2.5, 0.6, 1);
+            bellyGeom.scale(2.6, 0.55, 1);
             const bellyMaterial = new THREE.MeshStandardMaterial({
                 color: species.bellyColor,
-                roughness: 0.5,
-                metalness: 0.1
+                roughness: 0.45,
+                metalness: 0.08
             });
             const belly = new THREE.Mesh(bellyGeom, bellyMaterial);
-            belly.position.set(s * 0.05, -s * 0.04, 0);
+            belly.position.set(s * 0.04, -s * 0.035, 0);
             fishGroup.add(belly);
             
-            // === TAIL FIN (forked caudal fin) ===
+            // Tail fin
             const tailGroup = new THREE.Group();
             const finMaterial = new THREE.MeshStandardMaterial({
                 color: species.finColor,
-                roughness: 0.65,
+                roughness: 0.6,
                 metalness: 0.05,
                 side: THREE.DoubleSide,
                 transparent: true,
-                opacity: 0.85
+                opacity: 0.82
             });
             
-            // Upper tail lobe
             const tailShape1 = new THREE.Shape();
             tailShape1.moveTo(0, 0);
-            tailShape1.bezierCurveTo(s * 0.1, s * 0.05, s * 0.18, s * 0.12, s * 0.25, s * 0.18);
-            tailShape1.bezierCurveTo(s * 0.15, s * 0.08, s * 0.08, s * 0.02, s * 0.06, 0);
+            tailShape1.bezierCurveTo(s * 0.08, s * 0.04, s * 0.16, s * 0.1, s * 0.22, s * 0.16);
+            tailShape1.bezierCurveTo(s * 0.13, s * 0.07, s * 0.06, s * 0.02, s * 0.05, 0);
             tailShape1.closePath();
             
             const tailGeom1 = new THREE.ShapeGeometry(tailShape1);
             const tailUpper = new THREE.Mesh(tailGeom1, finMaterial);
             tailUpper.rotation.y = Math.PI / 2;
-            tailUpper.position.z = s * 0.01;
+            tailUpper.position.z = s * 0.008;
             tailGroup.add(tailUpper);
             
-            // Lower tail lobe (mirror)
             const tailShape2 = new THREE.Shape();
             tailShape2.moveTo(0, 0);
-            tailShape2.bezierCurveTo(s * 0.1, -s * 0.05, s * 0.18, -s * 0.12, s * 0.25, -s * 0.18);
-            tailShape2.bezierCurveTo(s * 0.15, -s * 0.08, s * 0.08, -s * 0.02, s * 0.06, 0);
+            tailShape2.bezierCurveTo(s * 0.08, -s * 0.04, s * 0.16, -s * 0.1, s * 0.22, -s * 0.16);
+            tailShape2.bezierCurveTo(s * 0.13, -s * 0.07, s * 0.06, -s * 0.02, s * 0.05, 0);
             tailShape2.closePath();
             
             const tailGeom2 = new THREE.ShapeGeometry(tailShape2);
             const tailLower = new THREE.Mesh(tailGeom2, finMaterial);
             tailLower.rotation.y = Math.PI / 2;
-            tailLower.position.z = -s * 0.01;
+            tailLower.position.z = -s * 0.008;
             tailGroup.add(tailLower);
             
-            tailGroup.position.x = -s * 0.42;
+            tailGroup.position.x = -s * 0.44;
             fishGroup.add(tailGroup);
             fishGroup.userData.tail = tailGroup;
             
-            // === DORSAL FIN ===
+            // Dorsal fin
             const dorsalShape = new THREE.Shape();
             dorsalShape.moveTo(0, 0);
-            dorsalShape.bezierCurveTo(s * 0.02, s * 0.08, s * 0.08, s * 0.14, s * 0.18, s * 0.12);
-            dorsalShape.bezierCurveTo(s * 0.22, s * 0.08, s * 0.25, s * 0.03, s * 0.28, 0);
+            dorsalShape.bezierCurveTo(s * 0.02, s * 0.07, s * 0.07, s * 0.12, s * 0.16, s * 0.1);
+            dorsalShape.bezierCurveTo(s * 0.2, s * 0.06, s * 0.22, s * 0.025, s * 0.25, 0);
             dorsalShape.closePath();
             
             const dorsalGeom = new THREE.ShapeGeometry(dorsalShape);
             const dorsalFin = new THREE.Mesh(dorsalGeom, finMaterial);
             dorsalFin.rotation.x = -Math.PI / 2;
-            dorsalFin.position.set(-s * 0.02, s * 0.09, 0);
+            dorsalFin.position.set(-s * 0.02, s * 0.08, 0);
             fishGroup.add(dorsalFin);
             fishGroup.userData.dorsalFin = dorsalFin;
             
-            // === PECTORAL FINS (side fins) ===
+            // Pectoral fins
             const pectoralShape = new THREE.Shape();
             pectoralShape.moveTo(0, 0);
-            pectoralShape.bezierCurveTo(s * 0.04, s * 0.02, s * 0.1, s * 0.01, s * 0.14, -s * 0.04);
-            pectoralShape.bezierCurveTo(s * 0.08, -s * 0.02, s * 0.03, -s * 0.01, 0, -s * 0.02);
+            pectoralShape.bezierCurveTo(s * 0.035, s * 0.015, s * 0.09, s * 0.008, s * 0.12, -s * 0.035);
+            pectoralShape.bezierCurveTo(s * 0.07, -s * 0.018, s * 0.025, -s * 0.008, 0, -s * 0.018);
             pectoralShape.closePath();
             
             const pectoralGeom = new THREE.ShapeGeometry(pectoralShape);
             
             const leftPectoral = new THREE.Mesh(pectoralGeom, finMaterial);
-            leftPectoral.position.set(s * 0.12, -s * 0.02, s * 0.09);
-            leftPectoral.rotation.set(0.4, 0.3, 0.2);
+            leftPectoral.position.set(s * 0.1, -s * 0.02, s * 0.08);
+            leftPectoral.rotation.set(0.35, 0.25, 0.18);
             fishGroup.add(leftPectoral);
             fishGroup.userData.leftFin = leftPectoral;
             
             const rightPectoral = new THREE.Mesh(pectoralGeom, finMaterial);
-            rightPectoral.position.set(s * 0.12, -s * 0.02, -s * 0.09);
-            rightPectoral.rotation.set(-0.4, -0.3, 0.2);
+            rightPectoral.position.set(s * 0.1, -s * 0.02, -s * 0.08);
+            rightPectoral.rotation.set(-0.35, -0.25, 0.18);
             fishGroup.add(rightPectoral);
             fishGroup.userData.rightFin = rightPectoral;
             
-            // === ANAL FIN (small ventral fin) ===
+            // Anal fin
             const analShape = new THREE.Shape();
             analShape.moveTo(0, 0);
-            analShape.quadraticCurveTo(s * 0.03, -s * 0.05, s * 0.08, -s * 0.04);
-            analShape.quadraticCurveTo(s * 0.06, -s * 0.02, s * 0.1, 0);
+            analShape.quadraticCurveTo(s * 0.025, -s * 0.04, s * 0.07, -s * 0.035);
+            analShape.quadraticCurveTo(s * 0.05, -s * 0.015, s * 0.085, 0);
             analShape.closePath();
             
             const analGeom = new THREE.ShapeGeometry(analShape);
             const analFin = new THREE.Mesh(analGeom, finMaterial);
             analFin.rotation.x = -Math.PI / 2;
-            analFin.position.set(-s * 0.18, -s * 0.07, 0);
+            analFin.position.set(-s * 0.16, -s * 0.06, 0);
             fishGroup.add(analFin);
             
-            // === EYES ===
-            const eyeOuterGeom = new THREE.SphereGeometry(s * 0.028, 8, 8);
+            // Eyes
+            const eyeOuterGeom = new THREE.SphereGeometry(s * 0.025, 8, 8);
             const eyeOuterMat = new THREE.MeshStandardMaterial({ 
-                color: 0xf8f8f0,
-                roughness: 0.3,
+                color: 0xf5f5e8,
+                roughness: 0.25,
                 metalness: 0.0
             });
-            const eyeInnerGeom = new THREE.SphereGeometry(s * 0.018, 6, 6);
-            const eyeInnerMat = new THREE.MeshBasicMaterial({ color: 0x1a1a1a });
+            const eyeInnerGeom = new THREE.SphereGeometry(s * 0.016, 6, 6);
+            const eyeInnerMat = new THREE.MeshBasicMaterial({ color: 0x151515 });
             
-            // Left eye
             const leftEyeOuter = new THREE.Mesh(eyeOuterGeom, eyeOuterMat);
-            leftEyeOuter.position.set(s * 0.32, s * 0.03, s * 0.055);
+            leftEyeOuter.position.set(s * 0.30, s * 0.025, s * 0.05);
             fishGroup.add(leftEyeOuter);
             const leftEyeInner = new THREE.Mesh(eyeInnerGeom, eyeInnerMat);
-            leftEyeInner.position.set(s * 0.335, s * 0.03, s * 0.065);
+            leftEyeInner.position.set(s * 0.315, s * 0.025, s * 0.06);
             fishGroup.add(leftEyeInner);
             
-            // Right eye
             const rightEyeOuter = new THREE.Mesh(eyeOuterGeom, eyeOuterMat);
-            rightEyeOuter.position.set(s * 0.32, s * 0.03, -s * 0.055);
+            rightEyeOuter.position.set(s * 0.30, s * 0.025, -s * 0.05);
             fishGroup.add(rightEyeOuter);
             const rightEyeInner = new THREE.Mesh(eyeInnerGeom, eyeInnerMat);
-            rightEyeInner.position.set(s * 0.335, s * 0.03, -s * 0.065);
+            rightEyeInner.position.set(s * 0.315, s * 0.025, -s * 0.06);
             fishGroup.add(rightEyeInner);
             
-            // === SWIMMING BEHAVIOR DATA ===
+            // IMPROVED: Swimming behavior with tunnel approaches
             fishGroup.userData.species = species;
             fishGroup.userData.isIndividual = true;
             fishGroup.userData.swimData = {
-                // Swimming path parameters
-                centerX: (Math.random() - 0.5) * 3,
-                centerZ: (Math.random() - 0.5) * 3,
-                radiusX: 4 + Math.random() * 5,
-                radiusZ: 3 + Math.random() * 5,
-                height: 0.3 + Math.random() * 3.5,
-                heightVariation: 0.25 + Math.random() * 0.5,
-                
-                // Speed and phase
-                speed: 0.12 + Math.random() * 0.12,
+                centerX: (Math.random() - 0.5) * 2.5,
+                centerZ: (Math.random() - 0.5) * 2.5,
+                radiusX: 3.5 + Math.random() * 4.5,
+                radiusZ: 3 + Math.random() * 4.5,
+                height: 0.2 + Math.random() * 3.2,
+                heightVariation: 0.2 + Math.random() * 0.45,
+                speed: 0.1 + Math.random() * 0.1,
                 phase: Math.random() * Math.PI * 2,
                 verticalPhase: Math.random() * Math.PI * 2,
-                
-                // Animation timing
-                tailSpeed: 3.5 + Math.random() * 2,
-                tailAmount: 0.35 + Math.random() * 0.15,
-                finSpeed: 2.5 + Math.random() * 1.5,
-                bodyWiggleSpeed: 2.2 + Math.random() * 0.8,
-                bodyWiggleAmount: 0.025 + Math.random() * 0.02
+                tailSpeed: 3.2 + Math.random() * 1.8,
+                tailAmount: 0.3 + Math.random() * 0.12,
+                finSpeed: 2.2 + Math.random() * 1.3,
+                bodyWiggleSpeed: 2.0 + Math.random() * 0.7,
+                bodyWiggleAmount: 0.02 + Math.random() * 0.015
             };
             
             return fishGroup;
@@ -835,53 +992,47 @@
         
         function createFishSchool() {
             const schoolGroup = new THREE.Group();
-            const schoolSize = 15 + Math.floor(Math.random() * 10);
-            
-            // School fish are smaller, simpler geometry for performance
-            const schoolSpecies = FISH_SPECIES[3]; // Use damselfish colors
+            const schoolSize = 18 + Math.floor(Math.random() * 10);
+            const schoolSpecies = FISH_SPECIES[3];
             
             for (let i = 0; i < schoolSize; i++) {
                 const smallFish = new THREE.Group();
-                const sf = 0.25 + Math.random() * 0.15; // Small size factor
+                const sf = 0.22 + Math.random() * 0.14;
                 
-                // Simplified tapered body
-                const bodyGeom = new THREE.ConeGeometry(sf * 0.08, sf * 0.35, 6);
+                const bodyGeom = new THREE.ConeGeometry(sf * 0.07, sf * 0.32, 6);
                 bodyGeom.rotateZ(Math.PI / 2);
                 
-                // Color variation within school
                 const colorVariation = new THREE.Color(schoolSpecies.bodyColor);
                 colorVariation.offsetHSL(
-                    (Math.random() - 0.5) * 0.05,
-                    (Math.random() - 0.5) * 0.1,
-                    (Math.random() - 0.5) * 0.1
+                    (Math.random() - 0.5) * 0.04,
+                    (Math.random() - 0.5) * 0.08,
+                    (Math.random() - 0.5) * 0.08
                 );
                 
                 const bodyMat = new THREE.MeshStandardMaterial({
                     color: colorVariation,
-                    roughness: 0.6,
+                    roughness: 0.55,
                     metalness: 0.1
                 });
                 
                 const body = new THREE.Mesh(bodyGeom, bodyMat);
                 smallFish.add(body);
                 
-                // Simple forked tail
-                const tailGeom = new THREE.ConeGeometry(sf * 0.05, sf * 0.12, 4);
+                const tailGeom = new THREE.ConeGeometry(sf * 0.045, sf * 0.1, 4);
                 tailGeom.rotateZ(-Math.PI / 2);
                 const tail = new THREE.Mesh(tailGeom, bodyMat);
-                tail.position.x = -sf * 0.22;
-                tail.scale.y = 1.5;
+                tail.position.x = -sf * 0.2;
+                tail.scale.y = 1.6;
                 smallFish.add(tail);
                 smallFish.userData.tail = tail;
                 
-                // Position within school formation (boid-like clustering)
-                const shellRadius = 0.4 + Math.random() * 1.2;
+                const shellRadius = 0.35 + Math.random() * 1.1;
                 const shellTheta = Math.random() * Math.PI * 2;
-                const shellPhi = Math.random() * Math.PI * 0.6 + Math.PI * 0.2;
+                const shellPhi = Math.random() * Math.PI * 0.55 + Math.PI * 0.22;
                 
                 smallFish.position.set(
                     shellRadius * Math.sin(shellPhi) * Math.cos(shellTheta),
-                    shellRadius * Math.cos(shellPhi) * 0.5,
+                    shellRadius * Math.cos(shellPhi) * 0.45,
                     shellRadius * Math.sin(shellPhi) * Math.sin(shellTheta)
                 );
                 
@@ -898,13 +1049,13 @@
             
             schoolGroup.userData.isSchool = true;
             schoolGroup.userData.swimData = {
-                centerX: 2,
-                centerZ: -1,
-                radiusX: 7,
-                radiusZ: 6,
-                height: 2.8,
-                heightVariation: 0.6,
-                speed: 0.18,
+                centerX: 1.5,
+                centerZ: -0.5,
+                radiusX: 6.5,
+                radiusZ: 5.5,
+                height: 2.5,
+                heightVariation: 0.55,
+                speed: 0.15,
                 phase: Math.random() * Math.PI * 2,
                 verticalPhase: 0
             };
@@ -912,48 +1063,46 @@
             scene.add(schoolGroup);
             fishes.push(schoolGroup);
             
-            // Create a second smaller school
             createSecondarySchool();
         }
         
         function createSecondarySchool() {
             const schoolGroup = new THREE.Group();
-            const schoolSize = 8 + Math.floor(Math.random() * 6);
-            
-            const species = FISH_SPECIES[4]; // Wrasse colors
+            const schoolSize = 10 + Math.floor(Math.random() * 6);
+            const species = FISH_SPECIES[4];
             
             for (let i = 0; i < schoolSize; i++) {
                 const smallFish = new THREE.Group();
-                const sf = 0.2 + Math.random() * 0.1;
+                const sf = 0.18 + Math.random() * 0.1;
                 
-                const bodyGeom = new THREE.ConeGeometry(sf * 0.07, sf * 0.3, 5);
+                const bodyGeom = new THREE.ConeGeometry(sf * 0.065, sf * 0.28, 5);
                 bodyGeom.rotateZ(Math.PI / 2);
                 
                 const colorVar = new THREE.Color(species.bodyColor);
-                colorVar.offsetHSL(0, (Math.random() - 0.5) * 0.15, (Math.random() - 0.5) * 0.1);
+                colorVar.offsetHSL(0, (Math.random() - 0.5) * 0.12, (Math.random() - 0.5) * 0.08);
                 
                 const bodyMat = new THREE.MeshStandardMaterial({
                     color: colorVar,
-                    roughness: 0.6,
+                    roughness: 0.55,
                     metalness: 0.1
                 });
                 
                 const body = new THREE.Mesh(bodyGeom, bodyMat);
                 smallFish.add(body);
                 
-                const tailGeom = new THREE.ConeGeometry(sf * 0.04, sf * 0.1, 3);
+                const tailGeom = new THREE.ConeGeometry(sf * 0.035, sf * 0.09, 3);
                 tailGeom.rotateZ(-Math.PI / 2);
                 const tail = new THREE.Mesh(tailGeom, bodyMat);
-                tail.position.x = -sf * 0.18;
+                tail.position.x = -sf * 0.16;
                 smallFish.add(tail);
                 smallFish.userData.tail = tail;
                 
-                const radius = 0.3 + Math.random() * 0.8;
+                const radius = 0.25 + Math.random() * 0.7;
                 const theta = Math.random() * Math.PI * 2;
                 
                 smallFish.position.set(
                     radius * Math.cos(theta),
-                    (Math.random() - 0.5) * 0.6,
+                    (Math.random() - 0.5) * 0.55,
                     radius * Math.sin(theta)
                 );
                 
@@ -970,14 +1119,14 @@
             
             schoolGroup.userData.isSchool = true;
             schoolGroup.userData.swimData = {
-                centerX: -3,
+                centerX: -2.5,
                 centerZ: 2,
                 radiusX: 5,
-                radiusZ: 5.5,
-                height: 1.5,
-                heightVariation: 0.4,
-                speed: 0.22,
-                phase: Math.PI,
+                radiusZ: 5,
+                height: 1.3,
+                heightVariation: 0.35,
+                speed: 0.19,
+                phase: Math.PI * 0.7,
                 verticalPhase: Math.PI * 0.5
             };
             
@@ -993,35 +1142,28 @@
             
             loader.load(
                 MODEL_PATH,
-                // Success callback
                 function(gltf) {
                     const model = gltf.scene;
                     
-                    // Calculate bounding box to center and position model
                     const box = new THREE.Box3().setFromObject(model);
                     const center = box.getCenter(new THREE.Vector3());
                     const size = box.getSize(new THREE.Vector3());
                     
-                    // Center horizontally, sit on seafloor
                     model.position.x = -center.x;
                     model.position.z = -center.z;
                     model.position.y = -box.min.y - 2;
                     
-                    // Enable shadows for all meshes
                     model.traverse(function(child) {
                         if (child.isMesh) {
                             child.castShadow = true;
                             child.receiveShadow = true;
-                            // Enhance material for underwater look
                             if (child.material) {
-                                child.material.envMapIntensity = 0.5;
+                                child.material.envMapIntensity = 0.4;
                             }
                         }
                     });
                     
                     reefGroup.add(model);
-                    
-                    // Hide loading indicator
                     document.getElementById('loading').style.display = 'none';
                     
                     console.log('✅ Reef model loaded successfully!');
@@ -1030,7 +1172,6 @@
                         'H:', size.y.toFixed(2), 
                         'D:', size.z.toFixed(2));
                 },
-                // Progress callback
                 function(xhr) {
                     if (xhr.lengthComputable) {
                         const percent = Math.round(xhr.loaded / xhr.total * 100);
@@ -1038,7 +1179,6 @@
                             '<div class="spinner"></div>Loading reef module... ' + percent + '%';
                     }
                 },
-                // Error callback
                 function(error) {
                     console.error('❌ Error loading model:', error);
                     document.getElementById('loading').innerHTML = 
@@ -1051,24 +1191,21 @@
         }
         
         // ============================================================
-        // CUSTOM MOUSE/TOUCH CONTROLS (No OrbitControls)
+        // MOUSE/TOUCH CONTROLS
         // ============================================================
         function setupEventListeners() {
             const canvas = renderer.domElement;
             
-            // --- Mouse Events ---
             canvas.addEventListener('mousedown', onMouseDown);
             canvas.addEventListener('mousemove', onMouseMove);
             canvas.addEventListener('mouseup', onMouseUp);
             canvas.addEventListener('mouseleave', onMouseUp);
             canvas.addEventListener('wheel', onMouseWheel, { passive: false });
             
-            // --- Touch Events (mobile support) ---
             canvas.addEventListener('touchstart', onTouchStart, { passive: false });
             canvas.addEventListener('touchmove', onTouchMove, { passive: false });
             canvas.addEventListener('touchend', onTouchEnd);
             
-            // Context menu prevention for right-click
             canvas.addEventListener('contextmenu', e => e.preventDefault());
         }
         
@@ -1088,8 +1225,6 @@
             
             rotationY += deltaX * 0.006;
             rotationX += deltaY * 0.006;
-            
-            // Clamp vertical rotation to prevent flipping
             rotationX = Math.max(-Math.PI / 2.5, Math.min(Math.PI / 2.5, rotationX));
             
             previousMousePosition = { x: e.clientX, y: e.clientY };
@@ -1104,11 +1239,9 @@
             e.preventDefault();
             const zoomSpeed = 0.015;
             cameraDistance += e.deltaY * zoomSpeed;
-            cameraDistance = Math.max(CAMERA_MIN_DISTANCE, 
-                             Math.min(CAMERA_MAX_DISTANCE, cameraDistance));
+            cameraDistance = Math.max(CAMERA_MIN_DISTANCE, Math.min(CAMERA_MAX_DISTANCE, cameraDistance));
         }
         
-        // Touch event handlers
         let lastTouchDistance = 0;
         
         function onTouchStart(e) {
@@ -1120,7 +1253,6 @@
                     y: e.touches[0].clientY
                 };
             } else if (e.touches.length === 2) {
-                // Pinch zoom
                 lastTouchDistance = getTouchDistance(e.touches);
             }
         }
@@ -1140,12 +1272,10 @@
                     y: e.touches[0].clientY
                 };
             } else if (e.touches.length === 2) {
-                // Pinch zoom
                 const distance = getTouchDistance(e.touches);
                 const delta = lastTouchDistance - distance;
                 cameraDistance += delta * 0.02;
-                cameraDistance = Math.max(CAMERA_MIN_DISTANCE, 
-                                 Math.min(CAMERA_MAX_DISTANCE, cameraDistance));
+                cameraDistance = Math.max(CAMERA_MIN_DISTANCE, Math.min(CAMERA_MAX_DISTANCE, cameraDistance));
                 lastTouchDistance = distance;
             }
         }
@@ -1187,22 +1317,12 @@
             
             const time = performance.now() * 0.001;
             
-            // Update camera
             updateCameraPosition();
-            
-            // Animate floating particles
             animateParticles(time);
-            
-            // Animate fish
             animateFish(time);
-            
-            // Animate seaweed/algae swaying
             updateSeaweed(time);
-            
-            // Animate caustics
             animateCaustics(time);
             
-            // Render
             renderer.render(scene, camera);
         }
         
@@ -1218,18 +1338,14 @@
                 let y = positions.getY(i);
                 let z = positions.getZ(i);
                 
-                // Rise slowly
                 y += vel.y;
+                x += vel.xDrift + Math.sin(time * 0.4 + vel.phase) * 0.0025;
+                z += vel.zDrift + Math.cos(time * 0.4 + vel.phase) * 0.0025;
                 
-                // Drift horizontally with subtle wave motion
-                x += vel.xDrift + Math.sin(time * 0.5 + vel.phase) * 0.003;
-                z += vel.zDrift + Math.cos(time * 0.5 + vel.phase) * 0.003;
-                
-                // Reset when too high
-                if (y > 20) {
-                    y = -3;
-                    x = (Math.random() - 0.5) * 50;
-                    z = (Math.random() - 0.5) * 50;
+                if (y > 22) {
+                    y = -4;
+                    x = (Math.random() - 0.5) * 55;
+                    z = (Math.random() - 0.5) * 55;
                 }
                 
                 positions.setXYZ(i, x, y, z);
@@ -1244,103 +1360,86 @@
                 
                 const t = time * data.speed + data.phase;
                 
-                // === SWIMMING PATH ===
-                // Elliptical path with slight figure-8 variation for natural movement
-                const pathVariation = Math.sin(t * 0.5) * 0.15;
+                const pathVariation = Math.sin(t * 0.45) * 0.12;
                 const pathX = data.centerX + Math.cos(t) * (data.radiusX + pathVariation);
                 const pathZ = data.centerZ + Math.sin(t) * (data.radiusZ - pathVariation);
                 const pathY = data.height + 
-                    Math.sin(t * 0.7 + data.verticalPhase) * data.heightVariation +
-                    Math.sin(t * 1.3) * data.heightVariation * 0.3;
+                    Math.sin(t * 0.65 + data.verticalPhase) * data.heightVariation +
+                    Math.sin(t * 1.2) * data.heightVariation * 0.25;
                 
                 fish.position.set(pathX, pathY, pathZ);
                 
-                // === ORIENTATION ===
-                // Calculate direction of movement for realistic facing
-                const lookAhead = 0.02;
+                const lookAhead = 0.018;
                 const nextT = t + lookAhead;
                 const nextX = data.centerX + Math.cos(nextT) * data.radiusX;
                 const nextZ = data.centerZ + Math.sin(nextT) * data.radiusZ;
-                const nextY = data.height + Math.sin(nextT * 0.7 + data.verticalPhase) * data.heightVariation;
+                const nextY = data.height + Math.sin(nextT * 0.65 + data.verticalPhase) * data.heightVariation;
                 
-                // Face direction of travel
                 fish.rotation.y = Math.atan2(nextX - pathX, nextZ - pathZ);
                 
-                // Slight pitch based on vertical movement
-                const pitchAmount = (nextY - pathY) * 2;
-                fish.rotation.x = Math.max(-0.15, Math.min(0.15, pitchAmount));
+                const pitchAmount = (nextY - pathY) * 1.8;
+                fish.rotation.x = Math.max(-0.12, Math.min(0.12, pitchAmount));
                 
-                // === INDIVIDUAL FISH ANIMATIONS ===
                 if (fish.userData.isIndividual) {
                     const swimData = fish.userData.swimData;
                     
-                    // Tail oscillation (faster when swimming)
                     if (fish.userData.tail) {
                         const tailOsc = Math.sin(time * swimData.tailSpeed) * swimData.tailAmount;
                         fish.userData.tail.rotation.y = tailOsc;
                     }
                     
-                    // Body S-curve wiggle
                     fish.rotation.z = Math.sin(time * swimData.bodyWiggleSpeed) * swimData.bodyWiggleAmount;
                     
-                    // Pectoral fin rowing motion
                     if (fish.userData.leftFin && fish.userData.rightFin) {
-                        const finOsc = Math.sin(time * swimData.finSpeed) * 0.25;
-                        fish.userData.leftFin.rotation.x = 0.4 + finOsc;
-                        fish.userData.leftFin.rotation.z = 0.2 + finOsc * 0.5;
-                        fish.userData.rightFin.rotation.x = -0.4 - finOsc;
-                        fish.userData.rightFin.rotation.z = 0.2 + finOsc * 0.5;
+                        const finOsc = Math.sin(time * swimData.finSpeed) * 0.22;
+                        fish.userData.leftFin.rotation.x = 0.35 + finOsc;
+                        fish.userData.leftFin.rotation.z = 0.18 + finOsc * 0.45;
+                        fish.userData.rightFin.rotation.x = -0.35 - finOsc;
+                        fish.userData.rightFin.rotation.z = 0.18 + finOsc * 0.45;
                     }
                     
-                    // Subtle dorsal fin wave
                     if (fish.userData.dorsalFin) {
-                        fish.userData.dorsalFin.rotation.z = Math.sin(time * 2 + index) * 0.05;
+                        fish.userData.dorsalFin.rotation.z = Math.sin(time * 1.8 + index) * 0.04;
                     }
                 }
                 
-                // === SCHOOL FISH ANIMATIONS ===
                 if (fish.userData.isSchool) {
                     fish.children.forEach((smallFish, fi) => {
                         if (!smallFish.userData.offset) return;
                         
                         const off = smallFish.userData.offset;
-                        
-                        // Cohesive school movement with individual variation
                         const individualPhase = off.phase;
-                        smallFish.position.x = off.x + Math.sin(time * 1.8 + individualPhase) * 0.12;
-                        smallFish.position.y = off.y + Math.sin(time * 1.2 + individualPhase) * 0.06;
-                        smallFish.position.z = off.z + Math.cos(time * 1.5 + individualPhase) * 0.1;
                         
-                        // Individual fish face same general direction as school
-                        smallFish.rotation.y = Math.sin(time * 0.8 + individualPhase) * 0.15;
+                        smallFish.position.x = off.x + Math.sin(time * 1.5 + individualPhase) * 0.1;
+                        smallFish.position.y = off.y + Math.sin(time * 1.0 + individualPhase) * 0.05;
+                        smallFish.position.z = off.z + Math.cos(time * 1.3 + individualPhase) * 0.08;
                         
-                        // Tail wagging
+                        smallFish.rotation.y = Math.sin(time * 0.7 + individualPhase) * 0.12;
+                        
                         if (smallFish.userData.tail) {
-                            smallFish.userData.tail.rotation.y = 
-                                Math.sin(time * 6 + off.tailPhase) * 0.4;
+                            smallFish.userData.tail.rotation.y = Math.sin(time * 5.5 + off.tailPhase) * 0.35;
                         }
                         
-                        // Body wiggle
-                        smallFish.rotation.z = Math.sin(time * 4 + individualPhase) * 0.06;
+                        smallFish.rotation.z = Math.sin(time * 3.5 + individualPhase) * 0.05;
                     });
                 }
             });
         }
         
+        // IMPROVED: Multi-layer caustics animation
         function animateCaustics(time) {
-            if (!causticPlane) return;
-            
-            // Subtle pulsing effect
-            causticPlane.material.opacity = 0.06 + Math.sin(time * 2) * 0.02;
-            causticPlane.position.x = Math.sin(time * 0.3) * 0.5;
-            causticPlane.position.z = Math.cos(time * 0.2) * 0.5;
+            causticMeshes.forEach((caustic, index) => {
+                const data = caustic.userData;
+                caustic.material.opacity = 0.035 + Math.sin(time * 1.5 + index) * 0.02;
+                caustic.position.x = Math.sin(time * data.speedX + data.phaseX) * (0.8 + index * 0.3);
+                caustic.position.z = Math.cos(time * data.speedZ + data.phaseZ) * (0.6 + index * 0.25);
+                caustic.rotation.z = Math.sin(time * 0.08 + index) * 0.02;
+            });
         }
         
         // ============================================================
         // START APPLICATION
         // ============================================================
-        
-        // Set initial cursor style
         document.addEventListener('DOMContentLoaded', function() {
             init();
             animate();
